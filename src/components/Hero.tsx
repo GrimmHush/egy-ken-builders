@@ -21,7 +21,7 @@ export function Hero() {
       />
 
       <Container className="relative">
-        <div className="flex min-h-[92vh] flex-col pb-12 pt-32 sm:pt-36">
+        <div className="flex min-h-[92svh] flex-col pb-12 pt-32 sm:pt-36">
           <div className="flex flex-1 flex-col justify-center">
             <Reveal>
               <div className="flex items-center gap-3">

@@ -24,6 +24,20 @@ export function Navbar() {
     setOpen(false);
   }, [pathname]);
 
+  // When the mobile menu is open: lock background scroll and close on Escape.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   const light = !scrolled;
 
   const isActive = (href: string) =>
@@ -83,6 +97,7 @@ export function Navbar() {
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-menu"
             className={cn(
               "relative z-50 -mr-1 inline-flex h-10 w-10 items-center justify-center rounded-md md:hidden",
               open || !light ? "text-navy" : "text-bone",
@@ -95,6 +110,9 @@ export function Navbar() {
 
       {/* Mobile overlay */}
       <div
+        id="mobile-menu"
+        aria-hidden={!open}
+        inert={!open ? true : undefined}
         className={cn(
           "fixed inset-0 z-40 flex flex-col bg-navy-deep px-6 pt-28 pb-10 transition-all duration-300 md:hidden",
           open
