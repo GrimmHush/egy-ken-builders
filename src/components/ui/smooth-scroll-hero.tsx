@@ -69,7 +69,7 @@ export function SmoothScrollHero({
     [finalClipPercentage, 100],
   );
   const clipPath = useMotionTemplate`polygon(${clipStart}% ${clipStart}%, ${clipEnd}% ${clipStart}%, ${clipEnd}% ${clipEnd}%, ${clipStart}% ${clipEnd}%)`;
-  const scale = useTransform(scrollY, [0, scrollHeight + 500], [1.15, 1]);
+  const scale = useTransform(scrollY, [0, scrollHeight + 500], [1.06, 1]);
 
   return (
     <div
