@@ -44,12 +44,14 @@ export function Hero() {
 
   const cueOpacity = useTransform(progress, [0, 0.06], [1, 0]);
 
-  // Count the stats up once scrolling has started.
-  const [scrolled, setScrolled] = useState(false);
-  useMotionValueEvent(scrollY, "change", (v) => {
-    if (v > 40) setScrolled(true);
+  // Count the stats up when they actually reveal on screen (their reveal slot
+  // starts at progress 0.66). Under reduced motion the hero isn't pinned, so
+  // StatCounter's own in-view detection handles it (statsPlay stays false).
+  const [statsOnScreen, setStatsOnScreen] = useState(false);
+  useMotionValueEvent(progress, "change", (p) => {
+    if (p >= 0.66) setStatsOnScreen(true);
   });
-  const statsPlay = reduce || scrolled;
+  const statsPlay = reduce ? false : statsOnScreen;
 
   // Reduced motion: show everything in place, with no animation.
   const s = (r: { opacity: MotionValue<number>; y: MotionValue<number> }) =>
