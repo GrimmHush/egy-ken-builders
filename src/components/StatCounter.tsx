@@ -7,18 +7,22 @@ export function StatCounter({
   value,
   suffix = "",
   label,
+  play = false,
 }: {
   value: number;
   suffix?: string;
   label: string;
+  /** Force the count to run (e.g. when a parent drives it from scroll). */
+  play?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -15% 0px" });
   const reduce = useReducedMotion();
   const [n, setN] = useState(0);
+  const active = play || inView;
 
   useEffect(() => {
-    if (!inView) return;
+    if (!active) return;
     if (reduce) {
       setN(value);
       return;
@@ -34,7 +38,7 @@ export function StatCounter({
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [inView, reduce, value]);
+  }, [active, reduce, value]);
 
   return (
     <div ref={ref} className="text-center sm:text-left">
