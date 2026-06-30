@@ -78,7 +78,6 @@ export default function AboutPage() {
             </Reveal>
             <div className="order-1 lg:order-2">
               <SectionHeading
-                kicker="Our Story"
                 title="A premier builder, built on precision."
               />
               <div className="mt-6 space-y-4 text-base leading-relaxed text-charcoal/80">
@@ -130,7 +129,6 @@ export default function AboutPage() {
       <section className="bg-bone py-20 sm:py-28">
         <Container>
           <SectionHeading
-            kicker="Mission & Values"
             title="The principles behind every project."
             align="center"
           />
@@ -160,7 +158,6 @@ export default function AboutPage() {
       <section className="border-t border-concrete/40 bg-white py-20 sm:py-28">
         <Container>
           <SectionHeading
-            kicker="Credentials & Compliance"
             title="Fully registered, fully compliant."
             intro="Verifiable credentials that give institutional investors and developers complete confidence."
           />

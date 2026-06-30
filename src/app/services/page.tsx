@@ -66,14 +66,9 @@ export default function ServicesPage() {
 
                 <div className={cn(flip && "lg:order-1")}>
                   <Reveal>
-                    <div className="mb-4 flex items-center gap-3">
-                      <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-steel/10 text-steel">
-                        <Icon className="h-5 w-5" strokeWidth={1.7} />
-                      </span>
-                      <span className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-deep">
-                        Service 0{i + 1}
-                      </span>
-                    </div>
+                    <span className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-steel/10 text-steel">
+                      <Icon className="h-6 w-6" strokeWidth={1.7} />
+                    </span>
                     <h2 className="font-display text-2xl font-semibold leading-tight tracking-tight text-navy-deep sm:text-3xl">
                       {s.title}
                     </h2>
@@ -107,7 +102,6 @@ export default function ServicesPage() {
       <section className="border-t border-concrete/40 bg-white py-20 sm:py-28">
         <Container>
           <SectionHeading
-            kicker="How We Work"
             title="A seamless journey from vision to reality."
             align="center"
           />

@@ -33,7 +33,6 @@ export default function HomePage() {
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
               <SectionHeading
-                kicker="Who We Are"
                 title="Bridging global procurement with elite local engineering."
                 intro="Since 2018, EGY-KEN Builders Limited has delivered complex, high-end residential, commercial and specialised sports infrastructure across East Africa — built to international standards and finished to the highest spec."
               />
@@ -86,7 +85,6 @@ export default function HomePage() {
         <Container className="relative">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <SectionHeading
-              kicker="What We Do"
               title="End-to-end construction expertise."
               intro="Five specialised capabilities, delivered under one accountable team."
               tone="light-on-dark"
@@ -124,7 +122,6 @@ export default function HomePage() {
         <Container>
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <SectionHeading
-              kicker="Selected Work"
               title="Projects that define our standard."
             />
             <Reveal className="hidden md:block">
@@ -159,7 +156,6 @@ export default function HomePage() {
       <section className="border-t border-concrete/40 bg-white py-20 sm:py-28">
         <Container>
           <SectionHeading
-            kicker="How We Work"
             title="A seamless journey from vision to reality."
             align="center"
           />

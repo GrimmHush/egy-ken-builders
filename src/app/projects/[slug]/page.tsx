@@ -98,12 +98,9 @@ export default async function ProjectDetail({
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-16">
             <div className="lg:col-span-2">
               <Reveal>
-                <div className="mb-4 flex items-center gap-3">
-                  <span className="rule-amber" aria-hidden />
-                  <span className="text-xs font-semibold uppercase tracking-[0.22em] text-amber-deep">
-                    Project Scope
-                  </span>
-                </div>
+                <h2 className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/60">
+                  Project Scope
+                </h2>
                 <p className="text-lg leading-relaxed text-charcoal/85">
                   {project.scope}
                 </p>
@@ -161,12 +158,9 @@ export default async function ProjectDetail({
 
           {/* Gallery */}
           <div className="mt-16">
-            <div className="mb-6 flex items-center gap-3">
-              <span className="rule-amber" aria-hidden />
-              <span className="text-xs font-semibold uppercase tracking-[0.22em] text-amber-deep">
-                Gallery
-              </span>
-            </div>
+            <h2 className="mb-6 text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/60">
+              Gallery
+            </h2>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
               {Array.from({ length: project.gallery }).map((_, i) => (
                 <Reveal key={i} delay={(i % 2) * 0.08}>
