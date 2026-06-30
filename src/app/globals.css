@@ -80,6 +80,22 @@ body {
   background-size: 46px 46px;
 }
 
+/* Scroll-cue nudge */
+@keyframes scroll-nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+.animate-scroll-nudge {
+  animation: scroll-nudge 1.8s var(--ease-soft) infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

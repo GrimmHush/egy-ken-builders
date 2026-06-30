@@ -11,51 +11,38 @@ import { cn } from "@/lib/utils";
 import { useHydratedReducedMotion } from "@/lib/use-hydrated-reduced-motion";
 
 interface SmoothScrollHeroProps {
-  /**
-   * How many pixels of scrolling the reveal animation spans.
-   * @default 700
-   */
+  /** How many pixels of scrolling the reveal/scrub spans. @default 1400 */
   scrollHeight?: number;
   /** Background video source (served from /public). */
   videoSrc: string;
   /** Optional poster image (also used as the loading frame). */
   posterSrc?: string;
-  /**
-   * Node shown instead of the video when the user prefers reduced motion
-   * (e.g. an on-brand illustration). Falls back to the poster if omitted.
-   */
+  /** Node shown instead of the video when the user prefers reduced motion. */
   reducedMotionFallback?: React.ReactNode;
-  /**
-   * Clip-path inset at the start of the scroll (smaller = larger initial window).
-   * @default 25
-   */
+  /** When true, the video does not autoplay — its frame is scrubbed by scroll. */
+  scrub?: boolean;
+  /** Clip-path inset at the start of the scroll. @default 25 */
   initialClipPercentage?: number;
-  /**
-   * Clip-path inset at the start of the scroll for the far corner.
-   * @default 75
-   */
+  /** Clip-path inset for the far corner at the start of the scroll. @default 75 */
   finalClipPercentage?: number;
-  /** Overlay content (gradients, headline, CTAs…). Rendered above the video, never clipped. */
+  /** Overlay content — rendered above the video, never clipped. */
   children?: React.ReactNode;
   className?: string;
 }
 
-/**
- * Cinematic hero whose video background reveals from a centered window to
- * fullscreen as the page scrolls (clip-path + subtle scale). Overlay content
- * passed as `children` sits above the media and is never clipped.
- */
 export function SmoothScrollHero({
-  scrollHeight = 700,
+  scrollHeight = 1400,
   videoSrc,
   posterSrc,
   reducedMotionFallback,
+  scrub = false,
   initialClipPercentage = 25,
   finalClipPercentage = 75,
   children,
   className,
 }: SmoothScrollHeroProps) {
   const reduceMotion = useHydratedReducedMotion();
+  const videoRef = React.useRef<HTMLVideoElement>(null);
   const { scrollY } = useScroll();
 
   const clipStart = useTransform(
@@ -69,7 +56,38 @@ export function SmoothScrollHero({
     [finalClipPercentage, 100],
   );
   const clipPath = useMotionTemplate`polygon(${clipStart}% ${clipStart}%, ${clipEnd}% ${clipStart}%, ${clipEnd}% ${clipEnd}%, ${clipStart}% ${clipEnd}%)`;
-  const scale = useTransform(scrollY, [0, scrollHeight + 500], [1.06, 1]);
+  const scale = useTransform(scrollY, [0, scrollHeight + 400], [1.05, 1]);
+
+  // Scroll progress 0..1 used to scrub the video's currentTime.
+  const progress = useTransform(scrollY, [0, scrollHeight], [0, 1], {
+    clamp: true,
+  });
+
+  // Drive video frames from scroll: ease currentTime toward the scroll target.
+  React.useEffect(() => {
+    if (reduceMotion || !scrub) return;
+    let raf = 0;
+    const loop = () => {
+      const v = videoRef.current;
+      if (v && v.duration && !Number.isNaN(v.duration)) {
+        const target = progress.get() * v.duration;
+        const current = v.currentTime;
+        const next = current + (target - current) * 0.12;
+        if (Math.abs(target - current) > 0.015) {
+          try {
+            v.currentTime = next;
+          } catch {
+            /* seeking not ready yet */
+          }
+        }
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(raf);
+  }, [reduceMotion, scrub, progress]);
+
+  const useScrub = scrub && !reduceMotion;
 
   return (
     <div
@@ -94,21 +112,33 @@ export function SmoothScrollHero({
               ) : null))
           ) : (
             <motion.video
+              ref={videoRef}
               style={{ scale, willChange: "transform" }}
               className="absolute inset-0 h-full w-full object-cover"
               src={videoSrc}
               poster={posterSrc}
-              autoPlay
+              autoPlay={!useScrub}
+              loop={!useScrub}
               muted
-              loop
               playsInline
-              preload="metadata"
+              preload="auto"
               aria-hidden
+              onLoadedMetadata={(e) => {
+                if (!useScrub) return;
+                const v = e.currentTarget;
+                // Prime the decoder so scrubbed frames render, then hold on frame 0.
+                v.play()
+                  .then(() => {
+                    v.pause();
+                    v.currentTime = 0;
+                  })
+                  .catch(() => {});
+              }}
             />
           )}
         </motion.div>
 
-        {/* Overlay content (gradients, copy) — never clipped */}
+        {/* Overlay content — never clipped */}
         {children}
       </div>
     </div>
