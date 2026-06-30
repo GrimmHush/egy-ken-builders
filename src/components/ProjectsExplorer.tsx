@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useHydratedReducedMotion } from "@/lib/use-hydrated-reduced-motion";
 import { ProjectCard } from "@/components/ProjectCard";
 import { projects, categories, type Category } from "@/lib/projects";
 import { cn } from "@/lib/utils";
@@ -11,7 +12,7 @@ const label = (c: "All" | Category) =>
 
 export function ProjectsExplorer() {
   const [active, setActive] = useState<"All" | Category>("All");
-  const reduce = useReducedMotion();
+  const reduce = useHydratedReducedMotion();
   const list =
     active === "All" ? projects : projects.filter((p) => p.category === active);
 

@@ -4,11 +4,11 @@ import * as React from "react";
 import {
   motion,
   useMotionTemplate,
-  useReducedMotion,
   useScroll,
   useTransform,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useHydratedReducedMotion } from "@/lib/use-hydrated-reduced-motion";
 
 interface SmoothScrollHeroProps {
   /**
@@ -55,7 +55,7 @@ export function SmoothScrollHero({
   children,
   className,
 }: SmoothScrollHeroProps) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useHydratedReducedMotion();
   const { scrollY } = useScroll();
 
   const clipStart = useTransform(
