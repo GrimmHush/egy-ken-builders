@@ -65,7 +65,7 @@ export function Navbar() {
                     <Link
                       href={l.href}
                       className={cn(
-                        "relative text-sm font-medium tracking-wide transition-colors",
+                        "group relative text-sm font-medium tracking-wide transition-colors",
                         active
                           ? light
                             ? "text-amber"
@@ -76,9 +76,13 @@ export function Navbar() {
                       )}
                     >
                       {l.label}
-                      {active && (
-                        <span className="absolute -bottom-1.5 left-0 h-0.5 w-full bg-amber" />
-                      )}
+                      <span
+                        className={cn(
+                          "absolute -bottom-1.5 left-0 h-0.5 w-full origin-left bg-amber transition-transform duration-300 ease-out-expo",
+                          active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100",
+                        )}
+                        aria-hidden
+                      />
                     </Link>
                   </li>
                 );
@@ -86,7 +90,7 @@ export function Navbar() {
             </ul>
             <Link
               href="/contact"
-              className="rounded-md bg-amber px-4 py-2 text-sm font-semibold text-navy-deep shadow-sm transition-all duration-200 hover:bg-amber-soft active:scale-[0.98]"
+              className="rounded-md bg-amber px-4 py-2 text-sm font-semibold text-navy-deep shadow-sm transition-[transform,background-color,box-shadow] duration-300 ease-out-expo hover:-translate-y-0.5 hover:bg-amber-soft hover:shadow-[0_10px_26px_-12px_rgba(238,156,69,0.7)] active:translate-y-0 active:scale-[0.98]"
             >
               Request a Quote
             </Link>

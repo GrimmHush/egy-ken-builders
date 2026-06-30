@@ -67,7 +67,7 @@ export default function ContactPage() {
                     href={a.href}
                     target={a.external ? "_blank" : undefined}
                     rel={a.external ? "noopener noreferrer" : undefined}
-                    className="group flex items-center gap-4 rounded-xl border border-concrete/50 bg-white p-4 shadow-card transition-colors hover:border-amber/50"
+                    className="group flex items-center gap-4 rounded-xl border border-concrete/50 bg-white p-4 shadow-card transition-[transform,border-color,box-shadow] duration-500 ease-out-expo hover:-translate-y-1 hover:border-amber/50 hover:shadow-lift"
                   >
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-steel/10 text-steel transition-colors group-hover:bg-amber group-hover:text-navy-deep">
                       <a.Icon className="h-5 w-5" />

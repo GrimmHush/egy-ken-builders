@@ -185,7 +185,7 @@ export default async function ProjectDetail({
           {/* Next project */}
           <Link
             href={`/projects/${next.slug}`}
-            className="group mt-16 flex items-center justify-between gap-6 rounded-xl border border-concrete/50 bg-white p-6 shadow-card transition-colors hover:border-amber/50 sm:p-8"
+            className="group mt-16 flex items-center justify-between gap-6 rounded-xl border border-concrete/50 bg-white p-6 shadow-card transition-[transform,border-color,box-shadow] duration-500 ease-out-expo hover:-translate-y-1 hover:border-amber/50 hover:shadow-lift sm:p-8"
           >
             <div>
               <span className="text-xs font-semibold uppercase tracking-[0.16em] text-charcoal/70">
@@ -195,7 +195,7 @@ export default async function ProjectDetail({
                 {next.name}
               </div>
             </div>
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber text-navy-deep transition-transform duration-200 group-hover:translate-x-1">
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber text-navy-deep shadow-sm transition-[transform,box-shadow] duration-500 ease-out-expo group-hover:translate-x-1.5 group-hover:shadow-[0_10px_26px_-12px_rgba(238,156,69,0.8)]">
               <ArrowRight className="h-5 w-5" />
             </span>
           </Link>

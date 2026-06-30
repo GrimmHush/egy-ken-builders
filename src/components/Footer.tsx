@@ -60,7 +60,7 @@ export function Footer() {
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-concrete transition-colors hover:border-amber hover:text-amber"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-concrete transition-[transform,border-color,color] duration-300 ease-out-expo hover:-translate-y-0.5 hover:border-amber hover:text-amber"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -86,7 +86,7 @@ export function Footer() {
                 <li key={l.href}>
                   <Link
                     href={l.href}
-                    className="transition-colors hover:text-amber"
+                    className="link-underline transition-colors hover:text-amber"
                   >
                     {l.label}
                   </Link>
@@ -104,7 +104,7 @@ export function Footer() {
                 <li key={s.id}>
                   <Link
                     href="/services"
-                    className="transition-colors hover:text-amber"
+                    className="link-underline transition-colors hover:text-amber"
                   >
                     {s.title}
                   </Link>
@@ -128,7 +128,7 @@ export function Footer() {
               </li>
               <li className="flex gap-3">
                 <Phone className="mt-0.5 h-4 w-4 shrink-0 text-amber" />
-                <a href={telHref} className="transition-colors hover:text-amber">
+                <a href={telHref} className="link-underline transition-colors hover:text-amber">
                   {site.phoneDisplay}
                 </a>
               </li>
@@ -136,7 +136,7 @@ export function Footer() {
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-amber" />
                 <a
                   href={mailHref}
-                  className="break-all transition-colors hover:text-amber"
+                  className="break-all link-underline transition-colors hover:text-amber"
                 >
                   {site.email}
                 </a>
