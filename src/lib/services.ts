@@ -7,6 +7,8 @@ export type Service = {
   summary: string;
   body: string;
   points: string[];
+  /** Real photograph (served from /public). Falls back to BrandImage art when absent. */
+  image?: string;
 };
 
 export const services: Service[] = [
@@ -37,6 +39,7 @@ export const services: Service[] = [
       "Specialist global procurement",
       "Complete club facility delivery",
     ],
+    image: "/padel-court.png",
   },
   {
     id: "facades",
@@ -79,5 +82,6 @@ export const services: Service[] = [
       "Translucent tensile fabric canopies",
       "Healthcare & sports infrastructure",
     ],
+    image: "/steel-tensile-canopy.png",
   },
 ];

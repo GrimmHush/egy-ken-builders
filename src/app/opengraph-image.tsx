@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import { site } from "@/lib/site";
 
@@ -5,7 +7,12 @@ export const alt = `${site.legalName} — ${site.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpengraphImage() {
+export default async function OpengraphImage() {
+  // Embed the real logo lockup. Read at build time (this image is statically
+  // generated), so a plain fs read from the co-located asset is reliable.
+  const logoData = await readFile(join(process.cwd(), "src", "app", "og-logo.png"));
+  const logoSrc = `data:image/png;base64,${logoData.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -26,15 +33,30 @@ export default function OpengraphImage() {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            fontSize: 26,
-            letterSpacing: "3px",
-            textTransform: "uppercase",
-            color: "#ee9c45",
-            fontWeight: 700,
           }}
         >
-          <span>EGY·KEN Builders</span>
-          <span>NCA 1 · Nairobi</span>
+          <div
+            style={{
+              display: "flex",
+              background: "#f6f6f4",
+              padding: "16px 26px",
+              borderRadius: 16,
+            }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logoSrc} width={260} height={111} alt={site.name} />
+          </div>
+          <span
+            style={{
+              fontSize: 26,
+              letterSpacing: "3px",
+              textTransform: "uppercase",
+              color: "#ee9c45",
+              fontWeight: 700,
+            }}
+          >
+            NCA 1 · Nairobi
+          </span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>

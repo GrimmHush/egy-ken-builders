@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import {
   Building2,
   LandPlot,
@@ -58,8 +59,18 @@ export default function ServicesPage() {
                   delay={0.05}
                 >
                   <div className="overflow-hidden rounded-2xl shadow-lift">
-                    <div className="aspect-[4/3]">
-                      <BrandImage seed={30 + s.title.length + i} kind="card" />
+                    <div className="relative aspect-[4/3]">
+                      {s.image ? (
+                        <Image
+                          src={s.image}
+                          alt={s.title}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <BrandImage seed={30 + s.title.length + i} kind="card" />
+                      )}
                     </div>
                   </div>
                 </Reveal>
