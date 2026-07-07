@@ -38,7 +38,7 @@ export const site = {
   whatsapp: "254725250157",
   whatsappMessage:
     "Hello EGY-KEN Builders, I'd like to discuss a construction project.",
-  email: "Egyken.builders04@gmail.com",
+  email: "egykenbuilderlimited@gmail.com",
   hours: [
     { day: "Monday – Friday", time: "8:00 AM – 5:00 PM" },
     { day: "Saturday", time: "8:00 AM – 1:00 PM" },
@@ -47,12 +47,6 @@ export const site = {
   // Replace with the real embed/pin link when available.
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=Riverpoint+Kingara+Close+Kilimani+Nairobi",
-
-  socials: {
-    instagram: "#",
-    linkedin: "#",
-    facebook: "#",
-  },
 
   // Headline numbers for the trust bar (count-up animated)
   stats: [

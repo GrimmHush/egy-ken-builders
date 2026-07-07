@@ -68,6 +68,12 @@ const jsonLd = {
     addressRegion: "Nairobi",
     addressCountry: "KE",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    // Approximate: Kingara Close, Kilimani, Nairobi.
+    latitude: -1.2921,
+    longitude: 36.7752,
+  },
   areaServed: "East Africa",
   openingHoursSpecification: [
     {
@@ -100,8 +106,16 @@ export default function RootLayout({
               force them visible so all content remains readable. */}
           <style>{`[style*="opacity:0"]{opacity:1 !important;transform:none !important;}`}</style>
         </noscript>
+        <a
+          href="#main"
+          className="fixed left-4 top-4 z-[60] -translate-y-24 rounded-md bg-navy-deep px-4 py-2.5 text-sm font-semibold text-bone shadow-lift transition-transform duration-200 focus-visible:translate-y-0"
+        >
+          Skip to content
+        </a>
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
+          {children}
+        </main>
         <Footer />
         <WhatsAppFab />
         <script

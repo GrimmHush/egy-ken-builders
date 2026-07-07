@@ -11,6 +11,25 @@ function escapeHtml(s: string) {
     .replace(/>/g, "&gt;");
 }
 
+// Best-effort per-instance rate limit: 5 submissions per IP per 10 minutes.
+// Serverless instances don't share this map, so it's a speed bump for
+// unsophisticated spam, not a guarantee.
+const RATE_WINDOW_MS = 10 * 60_000;
+const RATE_MAX = 5;
+const hits = new Map<string, number[]>();
+
+function rateLimited(ip: string) {
+  const now = Date.now();
+  const recent = (hits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (recent.length >= RATE_MAX) {
+    hits.set(ip, recent);
+    return true;
+  }
+  recent.push(now);
+  hits.set(ip, recent);
+  return false;
+}
+
 export async function POST(request: Request) {
   let body: Record<string, string>;
   try {
@@ -19,16 +38,45 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  if (rateLimited(ip)) {
+    return NextResponse.json(
+      { error: "Too many messages in a short time. Please try again later, or call or WhatsApp us." },
+      { status: 429 },
+    );
+  }
+
   const name = (body.name ?? "").toString().trim();
   const email = (body.email ?? "").toString().trim();
   const phone = (body.phone ?? "").toString().trim();
   const projectType = (body.projectType ?? "").toString().trim();
   const budget = (body.budget ?? "").toString().trim();
   const message = (body.message ?? "").toString().trim();
+  const honeypot = (body.company ?? "").toString().trim();
+
+  // A filled honeypot means a bot; pretend success so it moves on.
+  if (honeypot) {
+    return NextResponse.json({ ok: true, delivered: false });
+  }
 
   if (!name || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || message.length < 10) {
     return NextResponse.json(
       { error: "Please complete the required fields." },
+      { status: 422 },
+    );
+  }
+
+  if (
+    name.length > 200 ||
+    email.length > 254 ||
+    phone.length > 50 ||
+    projectType.length > 100 ||
+    budget.length > 100 ||
+    message.length > 5000
+  ) {
+    return NextResponse.json(
+      { error: "Your message is too long — please shorten it and try again." },
       { status: 422 },
     );
   }

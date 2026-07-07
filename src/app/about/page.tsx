@@ -139,10 +139,8 @@ export default function AboutPage() {
                 delay={i * 0.06}
                 className="rounded-xl border border-concrete/50 bg-white p-7 shadow-card"
               >
-                <span className="font-display text-2xl font-semibold text-amber-deep">
-                  0{i + 1}
-                </span>
-                <h3 className="mt-3 font-display text-xl font-semibold text-navy-deep">
+                <span className="rule-amber" aria-hidden />
+                <h3 className="mt-4 font-display text-xl font-semibold text-navy-deep">
                   {v.title}
                 </h3>
                 <p className="mt-2 text-sm leading-relaxed text-charcoal/75">

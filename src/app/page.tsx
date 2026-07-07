@@ -38,18 +38,14 @@ export default function HomePage() {
               />
               <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
                 {site.values.map((v, i) => (
-                  <Reveal key={v.title} delay={i * 0.06} className="flex gap-3">
-                    <span className="mt-1 font-display text-sm font-semibold text-amber-deep">
-                      0{i + 1}
-                    </span>
-                    <div>
-                      <h3 className="text-sm font-semibold text-navy-deep">
-                        {v.title}
-                      </h3>
-                      <p className="mt-1 text-sm leading-relaxed text-charcoal/70">
-                        {v.body}
-                      </p>
-                    </div>
+                  <Reveal key={v.title} delay={i * 0.06}>
+                    <span className="rule-amber" aria-hidden />
+                    <h3 className="mt-3 text-sm font-semibold text-navy-deep">
+                      {v.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-relaxed text-charcoal/70">
+                      {v.body}
+                    </p>
                   </Reveal>
                 ))}
               </ul>

@@ -25,13 +25,13 @@ const budgets = [
 type Errors = Partial<Record<"name" | "email" | "message", string>>;
 
 const fieldBase =
-  "w-full rounded-md border bg-white px-4 py-3 text-sm text-charcoal placeholder:text-concrete-dark transition-colors focus:border-steel focus:outline-none focus:ring-2 focus:ring-steel/25";
+  "w-full rounded-md border bg-white px-4 py-3 text-sm text-charcoal placeholder:text-concrete-ink transition-colors focus:border-steel focus:outline-none focus:ring-2 focus:ring-steel/25";
 
 function Label({ htmlFor, children, required }: { htmlFor: string; children: React.ReactNode; required?: boolean }) {
   return (
     <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-medium text-navy-deep">
       {children}
-      {required && <span className="ml-0.5 text-amber-deep">*</span>}
+      {required && <span className="ml-0.5 text-amber-ink">*</span>}
     </label>
   );
 }
@@ -110,7 +110,7 @@ export function ContactForm() {
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-6 text-sm font-semibold text-steel hover:text-amber-deep"
+          className="mt-6 text-sm font-semibold text-steel hover:text-amber-ink"
         >
           Send another message
         </button>
@@ -125,6 +125,18 @@ export function ContactForm() {
       noValidate
       className="rounded-xl border border-concrete/50 bg-white p-6 shadow-card sm:p-8"
     >
+      {/* Honeypot: invisible to people, tempting to bots. The API silently
+          drops any submission that fills it. */}
+      <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+        <label htmlFor="company">Company</label>
+        <input
+          id="company"
+          name="company"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <div>
           <Label htmlFor="name" required>Full name</Label>

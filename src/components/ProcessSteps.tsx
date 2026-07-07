@@ -38,7 +38,7 @@ export function ProcessSteps() {
       />
       {steps.map((s, i) => (
         <Reveal key={s.n} delay={i * 0.08} className="relative">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-amber/50 bg-bone font-display text-base font-semibold text-amber-deep">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full border border-amber/50 bg-bone font-display text-base font-semibold text-amber-ink">
             {s.n}
           </div>
           <h3 className="mt-5 font-display text-lg font-semibold text-navy-deep">

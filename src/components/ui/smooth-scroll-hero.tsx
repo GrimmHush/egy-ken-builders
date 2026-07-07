@@ -15,6 +15,8 @@ interface SmoothScrollHeroProps {
   scrollHeight?: number;
   /** Background video source (served from /public). */
   videoSrc: string;
+  /** Lighter rendition served below the md breakpoint (768px). */
+  videoSrcMobile?: string;
   /** Optional poster image (also used as the loading frame). */
   posterSrc?: string;
   /** Node shown instead of the video when the user prefers reduced motion. */
@@ -33,6 +35,7 @@ interface SmoothScrollHeroProps {
 export function SmoothScrollHero({
   scrollHeight = 1400,
   videoSrc,
+  videoSrcMobile,
   posterSrc,
   reducedMotionFallback,
   scrub = false,
@@ -44,6 +47,17 @@ export function SmoothScrollHero({
   const reduceMotion = useHydratedReducedMotion();
   const videoRef = React.useRef<HTMLVideoElement>(null);
   const { scrollY } = useScroll();
+
+  // Pick the rendition for this viewport after mount. Until then only the
+  // poster paints, so the heavy video file never blocks first paint.
+  const [activeSrc, setActiveSrc] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    if (reduceMotion) return;
+    const mobile =
+      videoSrcMobile !== undefined &&
+      window.matchMedia("(max-width: 767px)").matches;
+    setActiveSrc(mobile ? videoSrcMobile : videoSrc);
+  }, [reduceMotion, videoSrc, videoSrcMobile]);
 
   const clipStart = useTransform(
     scrollY,
@@ -111,30 +125,45 @@ export function SmoothScrollHero({
                 />
               ) : null))
           ) : (
-            <motion.video
-              ref={videoRef}
-              style={{ scale, willChange: "transform" }}
-              className="absolute inset-0 h-full w-full object-cover"
-              src={videoSrc}
-              poster={posterSrc}
-              autoPlay={!useScrub}
-              loop={!useScrub}
-              muted
-              playsInline
-              preload="auto"
-              aria-hidden
-              onLoadedMetadata={(e) => {
-                if (!useScrub) return;
-                const v = e.currentTarget;
-                // Prime the decoder so scrubbed frames render, then hold on frame 0.
-                v.play()
-                  .then(() => {
-                    v.pause();
-                    v.currentTime = 0;
-                  })
-                  .catch(() => {});
-              }}
-            />
+            <>
+              {/* Poster paints on first load; the video covers it once its
+                  frames decode. */}
+              {posterSrc && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={posterSrc}
+                  alt=""
+                  aria-hidden
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              )}
+              {activeSrc && (
+                <motion.video
+                  ref={videoRef}
+                  style={{ scale, willChange: "transform" }}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  src={activeSrc}
+                  poster={posterSrc}
+                  autoPlay={!useScrub}
+                  loop={!useScrub}
+                  muted
+                  playsInline
+                  preload="auto"
+                  aria-hidden
+                  onLoadedMetadata={(e) => {
+                    if (!useScrub) return;
+                    const v = e.currentTarget;
+                    // Prime the decoder so scrubbed frames render, then hold on frame 0.
+                    v.play()
+                      .then(() => {
+                        v.pause();
+                        v.currentTime = 0;
+                      })
+                      .catch(() => {});
+                  }}
+                />
+              )}
+            </>
           )}
         </motion.div>
 

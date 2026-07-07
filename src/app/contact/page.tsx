@@ -88,9 +88,9 @@ export default function ContactPage() {
                 <div className="flex gap-3">
                   <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-amber-deep" />
                   <div>
-                    <h3 className="text-sm font-semibold text-navy-deep">
+                    <h2 className="text-sm font-semibold text-navy-deep">
                       Office
-                    </h3>
+                    </h2>
                     <p className="mt-1 text-sm leading-relaxed text-charcoal/70">
                       {site.address.line}
                       <br />
@@ -103,9 +103,9 @@ export default function ContactPage() {
                 <div className="mt-5 flex gap-3 border-t border-concrete/40 pt-5">
                   <Clock className="mt-0.5 h-5 w-5 shrink-0 text-amber-deep" />
                   <div>
-                    <h3 className="text-sm font-semibold text-navy-deep">
+                    <h2 className="text-sm font-semibold text-navy-deep">
                       Business hours
-                    </h3>
+                    </h2>
                     <ul className="mt-1 space-y-0.5 text-sm text-charcoal/70">
                       {site.hours.map((h) => (
                         <li key={h.day}>

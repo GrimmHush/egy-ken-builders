@@ -42,11 +42,11 @@ export function StatCounter({
 
   return (
     <div ref={ref} className="text-center sm:text-left">
-      <div className="font-display text-4xl font-semibold tracking-tight text-bone sm:text-5xl">
+      <div className="font-display text-3xl font-semibold tracking-tight text-bone sm:text-5xl">
         <span className="tabular-nums">{n}</span>
         <span className="text-amber">{suffix}</span>
       </div>
-      <div className="mt-1.5 text-xs font-medium uppercase tracking-[0.16em] text-concrete">
+      <div className="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-concrete sm:mt-1.5">
         {label}
       </div>
     </div>

@@ -14,6 +14,10 @@
   --color-amber: #ee9c45;
   --color-amber-soft: #f3b577;
   --color-amber-deep: #d9842c;
+  /* AA-safe text roles for light surfaces: amber-ink 5.0:1 and
+     concrete-ink 4.6:1 on bone. amber/amber-deep stay accent-only there. */
+  --color-amber-ink: #9a5a17;
+  --color-concrete-ink: #6d716f;
 
   /* Typography */
   --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;

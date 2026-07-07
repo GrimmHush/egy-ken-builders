@@ -52,7 +52,8 @@ export default function ServicesPage() {
             return (
               <div
                 key={s.id}
-                className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16"
+                id={s.id}
+                className="grid scroll-mt-24 grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16"
               >
                 <Reveal
                   className={cn(flip && "lg:order-2")}
@@ -65,6 +66,7 @@ export default function ServicesPage() {
                           src={s.image}
                           alt={s.title}
                           fill
+                          priority={i === 0}
                           sizes="(max-width: 1024px) 100vw, 50vw"
                           className="object-cover"
                         />
@@ -113,7 +115,7 @@ export default function ServicesPage() {
       <section className="border-t border-concrete/40 bg-white py-20 sm:py-28">
         <Container>
           <SectionHeading
-            title="A seamless journey from vision to reality."
+            title="From first brief to final handover."
             align="center"
           />
           <div className="mt-16">

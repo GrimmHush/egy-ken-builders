@@ -12,10 +12,10 @@ const variants: Record<Variant, string> = {
   primary:
     "bg-amber text-navy-deep shadow-sm hover:-translate-y-0.5 hover:bg-amber-soft hover:shadow-[0_12px_30px_-12px_rgba(238,156,69,0.7)]",
   outline:
-    "border border-navy/25 text-navy hover:-translate-y-0.5 hover:border-amber hover:text-amber-deep",
+    "border border-navy/25 text-navy hover:-translate-y-0.5 hover:border-amber hover:text-amber-ink",
   light:
     "border border-white/30 text-white hover:-translate-y-0.5 hover:border-white/60 hover:bg-white/10",
-  ghost: "px-0 text-steel hover:text-amber-deep",
+  ghost: "px-0 text-steel hover:text-amber-ink",
 };
 
 export function CTA({

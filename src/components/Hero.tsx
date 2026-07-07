@@ -13,7 +13,6 @@ import { SmoothScrollHero } from "@/components/ui/smooth-scroll-hero";
 import { Container } from "@/components/Container";
 import { CTA } from "@/components/CTA";
 import { StatCounter } from "@/components/StatCounter";
-import { BrandImage } from "@/components/BrandImage";
 import { useHydratedReducedMotion } from "@/lib/use-hydrated-reduced-motion";
 import { site } from "@/lib/site";
 
@@ -33,23 +32,23 @@ export function Hero() {
     clamp: true,
   });
 
-  // Each element reveals in its own scroll slot — line by line.
-  const kicker = useReveal(progress, 0.02, 0.1);
-  const line1 = useReveal(progress, 0.1, 0.2);
-  const line2 = useReveal(progress, 0.18, 0.28);
-  const line3 = useReveal(progress, 0.26, 0.36);
-  const para = useReveal(progress, 0.38, 0.5);
-  const ctas = useReveal(progress, 0.52, 0.64);
-  const stats = useReveal(progress, 0.66, 0.8);
+  // The kicker and first headline line enter on load, so the fold always
+  // answers "who is this" before any scrolling. Everything after reveals in
+  // its own scroll slot — line by line.
+  const line2 = useReveal(progress, 0.06, 0.16);
+  const line3 = useReveal(progress, 0.14, 0.24);
+  const para = useReveal(progress, 0.26, 0.38);
+  const ctas = useReveal(progress, 0.4, 0.52);
+  const stats = useReveal(progress, 0.54, 0.7);
 
   const cueOpacity = useTransform(progress, [0, 0.06], [1, 0]);
 
   // Count the stats up when they actually reveal on screen (their reveal slot
-  // starts at progress 0.66). Under reduced motion the hero isn't pinned, so
+  // starts at progress 0.54). Under reduced motion the hero isn't pinned, so
   // StatCounter's own in-view detection handles it (statsPlay stays false).
   const [statsOnScreen, setStatsOnScreen] = useState(false);
   useMotionValueEvent(progress, "change", (p) => {
-    if (p >= 0.66) setStatsOnScreen(true);
+    if (p >= 0.54) setStatsOnScreen(true);
   });
   const statsPlay = reduce ? false : statsOnScreen;
 
@@ -58,30 +57,41 @@ export function Hero() {
     reduce ? { opacity: 1, y: 0 } : r;
   const revealTransition = reduce ? { duration: 0 } : undefined;
 
+  // Load-time entrance for the always-visible fold elements.
+  const enter = (delay: number) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, y: 24 },
+          animate: { opacity: 1, y: 0 },
+          transition: {
+            duration: 0.8,
+            delay,
+            ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+          },
+        };
+
   return (
     <SmoothScrollHero
       videoSrc="/hero-video.mp4"
+      videoSrcMobile="/hero-video-mobile.mp4"
+      posterSrc="/hero-poster.jpg"
       scrollHeight={SCROLL_HEIGHT}
       scrub
       initialClipPercentage={22}
       finalClipPercentage={78}
-      reducedMotionFallback={<BrandImage seed={42} kind="hero" />}
     >
-      <Container className="relative z-20 flex min-h-[100svh] flex-col pb-12 pt-28 [text-shadow:0_2px_22px_rgba(2,18,28,0.6)] sm:pt-32">
+      <Container className="relative z-20 flex min-h-[100svh] flex-col pb-6 pt-24 [text-shadow:0_2px_22px_rgba(2,18,28,0.6)] sm:pb-12 sm:pt-32">
         <div className="flex flex-1 flex-col justify-center">
-          <motion.div
-            style={s(kicker)}
-            transition={revealTransition}
-            className="flex items-center gap-3"
-          >
+          <motion.div {...enter(0.1)} className="flex items-center gap-3">
             <span className="rule-amber" aria-hidden />
             <span className="text-xs font-semibold uppercase tracking-[0.22em] text-amber">
               Building &amp; Civil Engineering · Nairobi
             </span>
           </motion.div>
 
-          <h1 className="mt-6 max-w-3xl font-display text-[2.6rem] font-semibold leading-[1.05] tracking-tight text-bone sm:text-6xl md:text-[4.25rem]">
-            <motion.span style={s(line1)} transition={revealTransition} className="block">
+          <h1 className="mt-4 max-w-3xl font-display text-[clamp(2.1rem,9.5vw,2.6rem)] font-semibold leading-[1.05] tracking-tight text-bone sm:mt-6 sm:text-6xl md:text-[4.25rem]">
+            <motion.span {...enter(0.25)} className="block">
               We Build{" "}
               <span className="font-light italic text-amber">Landmark</span>
             </motion.span>
@@ -96,7 +106,7 @@ export function Hero() {
           <motion.p
             style={s(para)}
             transition={revealTransition}
-            className="mt-7 max-w-xl text-base leading-relaxed text-concrete sm:text-lg"
+            className="mt-4 max-w-xl text-sm leading-relaxed text-concrete sm:mt-7 sm:text-lg"
           >
             From high-rise residential towers to specialised sports
             infrastructure, EGY-KEN Builders delivers complex, high-end projects
@@ -107,7 +117,7 @@ export function Hero() {
           <motion.div
             style={s(ctas)}
             transition={revealTransition}
-            className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center"
+            className="mt-6 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center sm:gap-4"
           >
             <CTA href="/projects" variant="primary">
               View Our Projects
@@ -121,7 +131,7 @@ export function Hero() {
         <motion.div
           style={s(stats)}
           transition={revealTransition}
-          className="mt-12 grid grid-cols-2 gap-y-8 rounded-xl border border-white/10 bg-navy-deep/40 p-7 backdrop-blur-sm sm:grid-cols-4 sm:divide-x sm:divide-white/10"
+          className="mt-6 grid grid-cols-2 gap-y-5 rounded-xl border border-white/10 bg-navy-deep/40 p-5 backdrop-blur-sm sm:mt-12 sm:grid-cols-4 sm:gap-y-8 sm:divide-x sm:divide-white/10 sm:p-7"
         >
           {site.stats.map((st) => (
             <div key={st.label} className="sm:px-6 sm:first:pl-0">

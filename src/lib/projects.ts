@@ -1,6 +1,6 @@
-// Portfolio projects. `seed` drives the on-brand placeholder artwork variety and
-// `gallery` is how many images the detail page shows. Swap placeholders for real
-// photos by adding a `cover`/`photos` path field and rendering them in BrandImage.
+// Portfolio projects. Real photography lives in /public and is wired via
+// `cover` + `photos`. When a project has no photos yet, `seed` drives the
+// on-brand placeholder art and `gallery` is how many placeholders show.
 
 export type Category = "Residential" | "Commercial" | "Civil" | "Sports";
 
@@ -16,6 +16,12 @@ export type Project = {
   scope: string;
   highlights: { label: string; value: string }[];
   featured: boolean;
+  /** Cover photograph (from /public) — used on cards and the detail hero. */
+  cover?: string;
+  /** What the cover shows, for screen readers. */
+  coverAlt?: string;
+  /** Gallery photographs in display order (cover is not repeated). */
+  photos?: string[];
   seed: number;
   gallery: number;
 };
@@ -38,6 +44,10 @@ export const projects: Project[] = [
       { label: "Premium doors", value: "1,250" },
     ],
     featured: true,
+    cover: "/riverpoint-02.png",
+    coverAlt:
+      "Night concrete pour on a Riverpoint tower slab, rebar and crews against the Nairobi sunset",
+    photos: ["/riverpoint-01.png", "/riverpoint-03.png", "/riverpoint-04.png"],
     seed: 1,
     gallery: 5,
   },
@@ -58,6 +68,16 @@ export const projects: Project[] = [
       { label: "Role", value: "Main contractor" },
     ],
     featured: true,
+    cover: "/vinewood-cover.png",
+    coverAlt:
+      "Vinewood tower facade with timber-clad balconies and signage against a clear sky",
+    photos: [
+      "/vinewood-01.png",
+      "/vinewood-02.png",
+      "/vinewood-03.png",
+      "/vinewood-04.png",
+      "/vinewood-05.png",
+    ],
     seed: 2,
     gallery: 4,
   },
@@ -78,6 +98,10 @@ export const projects: Project[] = [
       { label: "Scope", value: "Structural" },
     ],
     featured: true,
+    cover: "/wilma-cover.png",
+    coverAlt:
+      "Wilma Towers at dusk — amber-accented twin high-rise with lit balconies",
+    photos: ["/wilma-01.png", "/wilma-02.png"],
     seed: 3,
     gallery: 5,
   },
@@ -98,6 +122,14 @@ export const projects: Project[] = [
       { label: "Delivery", value: "Turnkey" },
     ],
     featured: true,
+    cover: "/parklands-padel-cover.png",
+    coverAlt:
+      "Floodlit blue padel courts under a translucent canopy at dusk, Parklands",
+    photos: [
+      "/parklands-padel-01.png",
+      "/parklands-padel-02.png",
+      "/parklands-padel-03.png",
+    ],
     seed: 4,
     gallery: 4,
   },
@@ -118,6 +150,10 @@ export const projects: Project[] = [
       { label: "Enclave", value: "Riverside" },
     ],
     featured: false,
+    cover: "/divine-facade.png",
+    coverAlt:
+      "Divine Suites courtyard facades with aluminium windows and patterned balustrades",
+    photos: ["/divine-doors.png"],
     seed: 5,
     gallery: 4,
   },
@@ -138,6 +174,10 @@ export const projects: Project[] = [
       { label: "Sector", value: "Healthcare" },
     ],
     featured: false,
+    cover: "/nakuru-hospital.png",
+    coverAlt:
+      "Structural steel decking and beams over a hospital wing during erection",
+    photos: ["/nakuru-hospital-01.png", "/nakuru-hospital-02.png"],
     seed: 6,
     gallery: 4,
   },

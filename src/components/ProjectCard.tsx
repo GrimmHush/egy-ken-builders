@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import { BrandImage } from "@/components/BrandImage";
 import type { Project } from "@/lib/projects";
@@ -20,9 +21,19 @@ export function ProjectCard({
       )}
     >
       <div className="absolute inset-0 overflow-hidden">
-        <div className="h-full w-full transition-transform duration-[1200ms] ease-out-expo group-hover:scale-[1.08]">
-          <BrandImage seed={project.seed} kind="card" />
-        </div>
+        {project.cover ? (
+          <Image
+            src={project.cover}
+            alt=""
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className="object-cover transition-transform duration-[1200ms] ease-out-expo group-hover:scale-[1.08]"
+          />
+        ) : (
+          <div className="h-full w-full transition-transform duration-[1200ms] ease-out-expo group-hover:scale-[1.08]">
+            <BrandImage seed={project.seed} kind="card" />
+          </div>
+        )}
       </div>
 
       {/* Legibility gradient */}

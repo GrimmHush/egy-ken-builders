@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, MapPin, Calendar, Building } from "lucide-react";
 import { Container } from "@/components/Container";
@@ -43,7 +44,17 @@ export default async function ProjectDetail({
       {/* Header */}
       <section className="relative overflow-hidden bg-navy-deep pt-[72px]">
         <div className="absolute inset-0 opacity-30" aria-hidden>
-          <BrandImage seed={project.seed} kind="hero" />
+          {project.cover ? (
+            <Image
+              src={project.cover}
+              alt=""
+              fill
+              sizes="100vw"
+              className="object-cover"
+            />
+          ) : (
+            <BrandImage seed={project.seed} kind="hero" />
+          )}
         </div>
         <div
           className="absolute inset-0 bg-gradient-to-b from-navy-deep/85 to-navy-deep"
@@ -84,8 +95,19 @@ export default async function ProjectDetail({
         <Container className="py-10 sm:py-14">
           <Reveal>
             <div className="overflow-hidden rounded-2xl shadow-lift">
-              <div className="aspect-[16/9]">
-                <BrandImage seed={project.seed * 3} kind="hero" />
+              <div className="relative aspect-[16/9]">
+                {project.cover ? (
+                  <Image
+                    src={project.cover}
+                    alt={project.coverAlt ?? `${project.name} — project photograph`}
+                    fill
+                    priority
+                    sizes="(max-width: 1152px) 100vw, 1152px"
+                    className="object-cover"
+                  />
+                ) : (
+                  <BrandImage seed={project.seed * 3} kind="hero" />
+                )}
               </div>
             </div>
           </Reveal>
@@ -162,17 +184,39 @@ export default async function ProjectDetail({
               Gallery
             </h2>
             <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              {Array.from({ length: project.gallery }).map((_, i) => (
-                <Reveal key={i} delay={(i % 2) * 0.08}>
-                  <div
-                    className={`overflow-hidden rounded-xl shadow-card ${
-                      i === 0 ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/3]"
-                    }`}
-                  >
-                    <BrandImage seed={project.seed * 10 + i + 1} kind="card" />
-                  </div>
-                </Reveal>
-              ))}
+              {project.photos
+                ? project.photos.map((src, i) => (
+                    <Reveal key={src} delay={(i % 2) * 0.08}>
+                      <div
+                        className={`relative overflow-hidden rounded-xl shadow-card ${
+                          i === 0 ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/3]"
+                        }`}
+                      >
+                        <Image
+                          src={src}
+                          alt={`${project.name} — site photograph ${i + 1} of ${project.photos!.length}`}
+                          fill
+                          sizes={
+                            i === 0
+                              ? "(max-width: 1152px) 100vw, 1152px"
+                              : "(max-width: 640px) 100vw, 50vw"
+                          }
+                          className="object-cover"
+                        />
+                      </div>
+                    </Reveal>
+                  ))
+                : Array.from({ length: project.gallery }).map((_, i) => (
+                    <Reveal key={i} delay={(i % 2) * 0.08}>
+                      <div
+                        className={`overflow-hidden rounded-xl shadow-card ${
+                          i === 0 ? "sm:col-span-2 aspect-[16/9]" : "aspect-[4/3]"
+                        }`}
+                      >
+                        <BrandImage seed={project.seed * 10 + i + 1} kind="card" />
+                      </div>
+                    </Reveal>
+                  ))}
             </div>
           </div>
 

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { navLinks } from "@/lib/site";
 import { Logo } from "@/components/Logo";
@@ -12,6 +12,8 @@ export function Navbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -24,14 +26,38 @@ export function Navbar() {
     setOpen(false);
   }, [pathname]);
 
-  // When the mobile menu is open: lock background scroll and close on Escape.
+  // When the mobile menu is open: lock background scroll, close on Escape,
+  // and trap Tab between the toggle button and the overlay's links.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        toggleRef.current?.focus();
+        return;
+      }
+      if (e.key !== "Tab") return;
+      const nodes = [
+        toggleRef.current,
+        ...Array.from(
+          overlayRef.current?.querySelectorAll<HTMLElement>("a[href]") ?? [],
+        ),
+      ].filter((n): n is HTMLElement => Boolean(n));
+      if (!nodes.length) return;
+      const idx = nodes.indexOf(document.activeElement as HTMLElement);
+      if (e.shiftKey) {
+        if (idx <= 0) {
+          e.preventDefault();
+          nodes[nodes.length - 1].focus();
+        }
+      } else if (idx === -1 || idx === nodes.length - 1) {
+        e.preventDefault();
+        nodes[0].focus();
+      }
     };
     document.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
+    overlayRef.current?.querySelector<HTMLElement>("a[href]")?.focus();
     return () => {
       document.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
@@ -69,7 +95,7 @@ export function Navbar() {
                         active
                           ? light
                             ? "text-amber"
-                            : "text-amber-deep"
+                            : "text-amber-ink"
                           : light
                             ? "text-bone/75 hover:text-bone"
                             : "text-navy/70 hover:text-navy",
@@ -97,6 +123,7 @@ export function Navbar() {
           </div>
 
           <button
+            ref={toggleRef}
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-label={open ? "Close menu" : "Open menu"}
@@ -114,7 +141,11 @@ export function Navbar() {
 
       {/* Mobile overlay */}
       <div
+        ref={overlayRef}
         id="mobile-menu"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site menu"
         aria-hidden={!open}
         inert={!open ? true : undefined}
         className={cn(

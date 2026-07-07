@@ -25,6 +25,7 @@ export const services: Service[] = [
       "Turnkey building construction",
       "FIDIC-standard project management",
     ],
+    image: "/riverpoint-01.png",
   },
   {
     id: "padel-courts",
@@ -54,6 +55,7 @@ export const services: Service[] = [
       "High-spec aluminium profiles",
       "In-house fabrication & installation",
     ],
+    image: "/divine-facade.png",
   },
   {
     id: "joinery",
@@ -68,6 +70,7 @@ export const services: Service[] = [
       "High-volume capacity (1,000+ units)",
       "Precision on-site fitting",
     ],
+    image: "/divine-doors.png",
   },
   {
     id: "steel-canopies",

@@ -5,36 +5,6 @@ import { Container } from "@/components/Container";
 import { services } from "@/lib/services";
 import { navLinks, site, telHref, mailHref } from "@/lib/site";
 
-const socials = [
-  {
-    label: "Instagram",
-    href: site.socials.instagram,
-    path: (
-      <>
-        <rect x="3" y="3" width="18" height="18" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none" />
-      </>
-    ),
-  },
-  {
-    label: "LinkedIn",
-    href: site.socials.linkedin,
-    filled: true,
-    path: (
-      <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.3-.02-2.96-1.8-2.96-1.8 0-2.08 1.4-2.08 2.86V21H9z" />
-    ),
-  },
-  {
-    label: "Facebook",
-    href: site.socials.facebook,
-    filled: true,
-    path: (
-      <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6c-.3-.04-1.3-.13-2.46-.13-2.43 0-4.1 1.48-4.1 4.2v2.34H7.3V13h2.84v8z" />
-    ),
-  },
-];
-
 const credentials = [
   `${site.credentials.nca.category} · Reg. ${site.credentials.nca.number}`,
   "KRA Tax Compliant",
@@ -54,27 +24,6 @@ export function Footer() {
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-concrete/90">
               {site.shortIntro}
             </p>
-            <div className="mt-6 flex items-center gap-3">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  aria-label={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-concrete transition-[transform,border-color,color] duration-300 ease-out-expo hover:-translate-y-0.5 hover:border-amber hover:text-amber"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    className="h-4 w-4"
-                    fill={s.filled ? "currentColor" : "none"}
-                    stroke={s.filled ? "none" : "currentColor"}
-                    strokeWidth={s.filled ? 0 : 1.8}
-                    aria-hidden
-                  >
-                    {s.path}
-                  </svg>
-                </a>
-              ))}
-            </div>
           </div>
 
           <div className="md:col-span-2">
@@ -103,7 +52,7 @@ export function Footer() {
               {services.map((s) => (
                 <li key={s.id}>
                   <Link
-                    href="/services"
+                    href={`/services#${s.id}`}
                     className="link-underline transition-colors hover:text-amber"
                   >
                     {s.title}

@@ -21,25 +21,20 @@ All copy/data lives in typed files — no code changes needed to update most con
 | Services | `src/lib/services.ts` |
 | Projects (+ detail pages, generated from this) | `src/lib/projects.ts` |
 
-## Swapping placeholder images for real photos
+## Photos
 
-Every image is currently an on-brand SVG placeholder rendered by
-`src/components/BrandImage.tsx` (a seeded architectural skyline). To use real photos:
+Real photography lives in `public/` (lowercase kebab-case names) and is wired
+through the data files — no component changes needed:
 
-1. Drop optimised images into `public/images/` (landscape, ≥ ~2000px wide).
-2. Replace `<BrandImage … />` usages with Next's `<Image>`:
+- **Services**: set `image` on an entry in `src/lib/services.ts`.
+- **Projects**: set `cover`, `coverAlt` and `photos` on an entry in
+  `src/lib/projects.ts` (cards, detail hero and gallery all follow).
 
-```tsx
-import Image from "next/image";
+Any entry without photos falls back to the on-brand SVG placeholder art
+(`src/components/BrandImage.tsx`). Surfaces still on placeholders:
+`PageHero.tsx` page headers and the about-page story panel.
 
-<Image src="/images/riverpoint-1.jpg" alt="Riverpoint towers, Lavington"
-       fill className="object-cover" sizes="(max-width:768px) 100vw, 50vw" />
-```
-
-Image usages to swap: `Hero.tsx`, `ProjectCard.tsx`, `PageHero.tsx`,
-`projects/[slug]/page.tsx` (cover + gallery), and the `about` / `services` panels.
-
-A field-by-field list of everything still needed is in
+Remaining asset wishes are tracked in
 [`docs/asset-checklist.md`](docs/asset-checklist.md).
 
 ## Contact form (Resend)
