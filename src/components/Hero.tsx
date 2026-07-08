@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   motion,
   useMotionValueEvent,
@@ -17,9 +17,6 @@ import { useHydratedReducedMotion } from "@/lib/use-hydrated-reduced-motion";
 import { site } from "@/lib/site";
 
 const SCROLL_HEIGHT = 1200;
-/* On phones the scrub distance is shorter: the copy enters on load instead
-   of per-slot, so the track only needs to carry the video expansion. */
-const SCROLL_HEIGHT_COMPACT = 620;
 
 /** Scroll-linked fade + rise over a [start,end] slice of progress (0..1). */
 function useReveal(progress: MotionValue<number>, start: number, end: number) {
@@ -28,33 +25,16 @@ function useReveal(progress: MotionValue<number>, start: number, end: number) {
   return { opacity, y };
 }
 
-/** Hydration-safe "phone-sized viewport" flag; false on the server. */
-function useCompactViewport(): boolean {
-  const [compact, setCompact] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
-    const update = () => setCompact(mq.matches);
-    update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
-  }, []);
-  return compact;
-}
-
 export function Hero() {
   const reduce = useHydratedReducedMotion();
-  const compact = useCompactViewport();
-  const trackHeight = compact ? SCROLL_HEIGHT_COMPACT : SCROLL_HEIGHT;
   const { scrollY } = useScroll();
-  const progress = useTransform(scrollY, [0, trackHeight], [0, 1], {
+  const progress = useTransform(scrollY, [0, SCROLL_HEIGHT], [0, 1], {
     clamp: true,
   });
 
   // The kicker and first headline line enter on load, so the fold always
-  // answers "who is this" before any scrolling. On larger screens everything
-  // after reveals in its own scroll slot — line by line. On phones the whole
-  // pitch enters on load: a mobile fold that withholds the value proposition
-  // and CTAs behind 1,200px of scrub loses distracted visitors.
+  // answers "who is this" before any scrolling. Everything after reveals in
+  // its own scroll slot — line by line, the same on every device.
   const line2 = useReveal(progress, 0.06, 0.16);
   const line3 = useReveal(progress, 0.14, 0.24);
   const para = useReveal(progress, 0.26, 0.38);
@@ -64,13 +44,13 @@ export function Hero() {
   const cueOpacity = useTransform(progress, [0, 0.06], [1, 0]);
 
   // Count the stats up when they actually reveal on screen (their reveal slot
-  // starts at progress 0.54). On phones and under reduced motion the slot
-  // doesn't apply, so StatCounter's own in-view detection takes over.
+  // starts at progress 0.54). Under reduced motion the hero isn't pinned, so
+  // StatCounter's own in-view detection handles it (statsPlay stays false).
   const [statsOnScreen, setStatsOnScreen] = useState(false);
   useMotionValueEvent(progress, "change", (p) => {
     if (p >= 0.54) setStatsOnScreen(true);
   });
-  const statsPlay = reduce || compact ? false : statsOnScreen;
+  const statsPlay = reduce ? false : statsOnScreen;
 
   const revealTransition = reduce ? { duration: 0 } : undefined;
 
@@ -88,15 +68,13 @@ export function Hero() {
           },
         };
 
-  // A choreographed element: scroll slot on larger screens, staggered
-  // load entrance on phones.
-  const slot = (
-    r: { opacity: MotionValue<number>; y: MotionValue<number> },
-    compactDelay: number,
-  ) => {
+  // A scroll-choreographed element; reduced motion shows it in place.
+  const slot = (r: {
+    opacity: MotionValue<number>;
+    y: MotionValue<number>;
+  }) => {
     if (reduce)
       return { style: { opacity: 1, y: 0 }, transition: { duration: 0 } };
-    if (compact) return enter(compactDelay);
     return { style: r, transition: revealTransition };
   };
 
@@ -105,7 +83,7 @@ export function Hero() {
       videoSrc="/hero-video.mp4"
       videoSrcMobile="/hero-video-mobile.mp4"
       posterSrc="/hero-poster.jpg"
-      scrollHeight={trackHeight}
+      scrollHeight={SCROLL_HEIGHT}
       scrub
       initialClipPercentage={22}
       finalClipPercentage={78}
@@ -124,16 +102,16 @@ export function Hero() {
               We Build{" "}
               <span className="font-light italic text-amber">Landmark</span>
             </motion.span>
-            <motion.span {...slot(line2, 0.4)} className="block">
+            <motion.span {...slot(line2)} className="block">
               Structures, Engineered
             </motion.span>
-            <motion.span {...slot(line3, 0.52)} className="block">
+            <motion.span {...slot(line3)} className="block">
               to Last.
             </motion.span>
           </h1>
 
           <motion.p
-            {...slot(para, 0.66)}
+            {...slot(para)}
             className="mt-4 max-w-xl text-sm leading-relaxed text-bone/80 sm:mt-7 sm:text-lg"
           >
             From high-rise residential towers to specialised sports
@@ -143,7 +121,7 @@ export function Hero() {
           </motion.p>
 
           <motion.div
-            {...slot(ctas, 0.8)}
+            {...slot(ctas)}
             className="mt-6 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center sm:gap-4"
           >
             <CTA href="/projects" variant="primary">
@@ -156,7 +134,7 @@ export function Hero() {
         </div>
 
         <motion.div
-          {...slot(stats, 0.95)}
+          {...slot(stats)}
           className="mt-6 grid grid-cols-2 gap-y-5 rounded-xl border border-white/10 bg-navy-deep/40 p-5 backdrop-blur-sm sm:mt-12 sm:grid-cols-4 sm:gap-y-8 sm:divide-x sm:divide-white/10 sm:p-7"
         >
           {site.stats.map((st) => (

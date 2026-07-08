@@ -24,29 +24,22 @@ export function PageHero({
         aria-hidden
       >
         {image ? (
+          // The wide 21:9 source is cropped hard on phones, so the needed
+          // resolution follows the rendered HEIGHT: request an oversized
+          // rendition below 640px or the crop upscales and pixelates.
           <Image
             src={image}
             alt=""
             fill
             priority
-            sizes="100vw"
+            sizes="(max-width: 640px) 300vw, 100vw"
             className="object-cover"
           />
         ) : (
           <BrandImage seed={seed} kind="hero" />
         )}
       </div>
-      {/* Legibility scrim anchored to the text side; the photo stays clear */}
-      <div
-        className="absolute inset-0 bg-gradient-to-r from-navy-deep/90 via-navy-deep/55 to-navy-deep/10 sm:via-navy-deep/40 sm:to-transparent"
-        aria-hidden
-      />
-      {/* Slim top band so the navbar stays readable over bright skies */}
-      <div
-        className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-navy-deep/70 to-transparent"
-        aria-hidden
-      />
-      <Container className="relative py-20 [text-shadow:0_2px_18px_rgba(2,18,28,0.55)] sm:py-28">
+      <Container className="relative py-20 [text-shadow:0_2px_10px_rgba(2,18,28,0.85),0_2px_28px_rgba(2,18,28,0.6)] sm:py-28">
         <Reveal className="max-w-3xl">
           <div className="mb-5 flex items-center gap-3">
             <span className="rule-amber" aria-hidden />

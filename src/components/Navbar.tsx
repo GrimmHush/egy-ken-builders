@@ -79,7 +79,14 @@ export function Navbar() {
             : "bg-transparent",
         )}
       >
-        <nav className="mx-auto flex h-[72px] max-w-6xl items-center justify-between px-5 sm:px-8">
+        <nav
+          className={cn(
+            "mx-auto flex h-[72px] max-w-6xl items-center justify-between px-5 sm:px-8",
+            // Over hero photography the links need their own shadow to stay
+            // readable against bright skies; no overlay on the image itself.
+            light && "[text-shadow:0_1px_8px_rgba(2,18,28,0.8)]",
+          )}
+        >
           <Logo tone={light ? "light" : "dark"} />
 
           <div className="hidden items-center gap-8 md:flex">
