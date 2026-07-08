@@ -103,7 +103,7 @@ export default function HomePage() {
             ))}
             <Reveal delay={services.length * 0.06} className="hidden lg:flex">
               <a
-                href="/services"
+                href="/contact"
                 className="group flex h-full w-full flex-col justify-between rounded-xl border border-amber/30 bg-amber/10 p-7 transition-colors hover:bg-amber/15"
               >
                 <span className="font-display text-xl font-semibold text-bone">

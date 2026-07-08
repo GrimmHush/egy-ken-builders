@@ -32,20 +32,26 @@ export function ServiceCard({
       delay={index * 0.06}
       className="group relative flex h-full min-h-[300px] flex-col overflow-hidden rounded-xl border border-white/10 bg-navy transition-[transform,border-color,box-shadow] duration-500 ease-out-expo hover:-translate-y-1.5 hover:border-amber/40 hover:shadow-glow"
     >
-      {/* Service photograph */}
+      {/* Service photograph — hover lifts the exposure tint instead of
+          zooming, so services and projects don't share one motion idea */}
       {service.image && (
         <Image
           src={service.image}
           alt=""
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="absolute inset-0 object-cover transition-transform duration-[1200ms] ease-out-expo group-hover:scale-[1.06]"
+          className="absolute inset-0 object-cover"
           aria-hidden
         />
       )}
-      {/* Legibility gradient — fully opaque where the text sits */}
+      {/* Legibility gradient — constant, fully opaque where the text sits */}
       <span
-        className="absolute inset-0 bg-gradient-to-t from-navy-deep via-navy-deep/75 to-navy-deep/25"
+        className="absolute inset-0 bg-gradient-to-t from-navy-deep via-navy-deep/70 to-transparent"
+        aria-hidden
+      />
+      {/* Exposure tint — fades out on hover so the photograph comes forward */}
+      <span
+        className="absolute inset-0 bg-navy-deep/45 transition-opacity duration-500 ease-out-expo group-hover:opacity-0"
         aria-hidden
       />
 

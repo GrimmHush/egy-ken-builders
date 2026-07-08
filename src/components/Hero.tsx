@@ -14,9 +14,14 @@ import { Container } from "@/components/Container";
 import { CTA } from "@/components/CTA";
 import { StatCounter } from "@/components/StatCounter";
 import { useHydratedReducedMotion } from "@/lib/use-hydrated-reduced-motion";
+import { useIsMobile } from "@/lib/use-is-mobile";
 import { site } from "@/lib/site";
 
-const SCROLL_HEIGHT = 1200;
+/* On desktop the film gets a long pinned reveal; on mobile the pitch and CTAs
+   must live in the first paint, so the scrub is much shorter and the clip
+   opens nearly full-bleed. */
+const DESKTOP = { scrollHeight: 1200, clipStart: 22, clipEnd: 78 };
+const MOBILE = { scrollHeight: 600, clipStart: 8, clipEnd: 92 };
 
 /** Scroll-linked fade + rise over a [start,end] slice of progress (0..1). */
 function useReveal(progress: MotionValue<number>, start: number, end: number) {
@@ -26,15 +31,25 @@ function useReveal(progress: MotionValue<number>, start: number, end: number) {
 }
 
 export function Hero() {
+  const mobile = useIsMobile();
+  // Remount on the mobile/desktop flip so every scroll mapping, clip range
+  // and entrance rebinds to the right values (the flip happens once, right
+  // after hydration, before any meaningful interaction).
+  return <HeroContent key={mobile ? "mobile" : "desktop"} mobile={mobile} />;
+}
+
+function HeroContent({ mobile }: { mobile: boolean }) {
   const reduce = useHydratedReducedMotion();
+  const { scrollHeight, clipStart, clipEnd } = mobile ? MOBILE : DESKTOP;
   const { scrollY } = useScroll();
-  const progress = useTransform(scrollY, [0, SCROLL_HEIGHT], [0, 1], {
+  const progress = useTransform(scrollY, [0, scrollHeight], [0, 1], {
     clamp: true,
   });
 
-  // The kicker and first headline line enter on load, so the fold always
-  // answers "who is this" before any scrolling. Everything after reveals in
-  // its own scroll slot — line by line, the same on every device.
+  // Desktop: the kicker and first headline line enter on load, everything
+  // after reveals in its own scroll slot. Mobile: the full headline, copy and
+  // CTAs enter on load (nothing to tap otherwise); only the stats stay
+  // scroll-choreographed.
   const line2 = useReveal(progress, 0.06, 0.16);
   const line3 = useReveal(progress, 0.14, 0.24);
   const para = useReveal(progress, 0.26, 0.38);
@@ -42,6 +57,11 @@ export function Hero() {
   const stats = useReveal(progress, 0.54, 0.7);
 
   const cueOpacity = useTransform(progress, [0, 0.06], [1, 0]);
+  // The cue is a real button (it skips the choreography); once it has faded
+  // it must stop catching taps.
+  const cuePointerEvents = useTransform(progress, (p) =>
+    p > 0.06 ? ("none" as const) : ("auto" as const),
+  );
 
   // Count the stats up when they actually reveal on screen (their reveal slot
   // starts at progress 0.54). Under reduced motion the hero isn't pinned, so
@@ -78,20 +98,45 @@ export function Hero() {
     return { style: r, transition: revealTransition };
   };
 
+  // Fold element: scroll slot on desktop, load entrance on mobile.
+  const foldSlot = (
+    r: { opacity: MotionValue<number>; y: MotionValue<number> },
+    mobileDelay: number,
+  ) => (mobile ? enter(mobileDelay) : slot(r));
+
+  const skipIntro = () =>
+    window.scrollTo({
+      top: scrollHeight,
+      behavior: reduce ? "auto" : "smooth",
+    });
+
   return (
     <SmoothScrollHero
       videoSrc="/hero-video.mp4"
       videoSrcMobile="/hero-video-mobile.mp4"
       posterSrc="/hero-poster.jpg"
-      scrollHeight={SCROLL_HEIGHT}
+      scrollHeight={scrollHeight}
       scrub
-      initialClipPercentage={22}
-      finalClipPercentage={78}
+      initialClipPercentage={clipStart}
+      finalClipPercentage={clipEnd}
     >
       <Container className="relative z-20 flex min-h-[100svh] flex-col pb-24 pt-24 [text-shadow:0_2px_22px_rgba(2,18,28,0.6)] sm:pb-12 sm:pt-32">
         <div className="flex flex-1 flex-col justify-center">
-          <motion.div {...enter(0.1)} className="flex items-center gap-3">
-            <span className="rule-amber" aria-hidden />
+          <motion.div
+            {...enter(0)}
+            className="mb-6 flex items-center justify-center gap-4 sm:mb-8"
+          >
+            <span className="h-px w-8 bg-bone/25 sm:w-12" aria-hidden />
+            <span className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-bone sm:text-base">
+              EGY-KEN Builders
+            </span>
+            <span className="h-px w-8 bg-bone/25 sm:w-12" aria-hidden />
+          </motion.div>
+
+          {/* items-start + offset keeps the rule on the first line when the
+              kicker wraps on narrow screens */}
+          <motion.div {...enter(0.1)} className="flex items-start gap-3">
+            <span className="rule-amber mt-[7px] shrink-0" aria-hidden />
             <span className="text-xs font-semibold uppercase tracking-[0.22em] text-amber">
               Building &amp; Civil Engineering · Nairobi
             </span>
@@ -102,16 +147,16 @@ export function Hero() {
               We Build{" "}
               <span className="font-light italic text-amber">Landmark</span>
             </motion.span>
-            <motion.span {...slot(line2)} className="block">
+            <motion.span {...foldSlot(line2, 0.4)} className="block">
               Structures, Engineered
             </motion.span>
-            <motion.span {...slot(line3)} className="block">
+            <motion.span {...foldSlot(line3, 0.5)} className="block">
               to Last.
             </motion.span>
           </h1>
 
           <motion.p
-            {...slot(para)}
+            {...foldSlot(para, 0.65)}
             className="mt-4 max-w-xl text-sm leading-relaxed text-bone/80 sm:mt-7 sm:text-lg"
           >
             From high-rise residential towers to specialised sports
@@ -121,7 +166,7 @@ export function Hero() {
           </motion.p>
 
           <motion.div
-            {...slot(ctas)}
+            {...foldSlot(ctas, 0.8)}
             className="mt-6 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center sm:gap-4"
           >
             <CTA href="/projects" variant="primary">
@@ -150,18 +195,25 @@ export function Hero() {
         </motion.div>
       </Container>
 
-      {/* Scroll cue */}
+      {/* Scroll cue — tapping it skips the pinned choreography */}
       {!reduce && (
         <motion.div
-          style={{ opacity: cueOpacity }}
-          className="pointer-events-none absolute inset-x-0 bottom-7 z-20 flex flex-col items-center gap-2 text-bone/70"
+          style={{ opacity: cueOpacity, pointerEvents: cuePointerEvents }}
+          className="absolute inset-x-0 bottom-7 z-20 flex justify-center"
         >
-          <span className="text-[10px] font-semibold uppercase tracking-[0.3em]">
-            Scroll
-          </span>
-          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25">
-            <ChevronDown className="h-4 w-4 animate-scroll-nudge" />
-          </span>
+          <button
+            type="button"
+            onClick={skipIntro}
+            aria-label="Skip the intro animation"
+            className="flex flex-col items-center gap-2 text-bone/70 transition-colors hover:text-bone focus-visible:text-bone"
+          >
+            <span className="text-[10px] font-semibold uppercase tracking-[0.3em]">
+              Scroll
+            </span>
+            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25">
+              <ChevronDown className="h-4 w-4 animate-scroll-nudge" />
+            </span>
+          </button>
         </motion.div>
       )}
     </SmoothScrollHero>
