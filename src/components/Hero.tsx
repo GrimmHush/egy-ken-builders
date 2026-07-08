@@ -46,15 +46,16 @@ function HeroContent({ mobile }: { mobile: boolean }) {
     clamp: true,
   });
 
-  // Desktop: the kicker and first headline line enter on load, everything
-  // after reveals in its own scroll slot. Mobile: the full headline, copy and
-  // CTAs enter on load (nothing to tap otherwise); only the stats stay
-  // scroll-choreographed.
-  const line2 = useReveal(progress, 0.06, 0.16);
-  const line3 = useReveal(progress, 0.14, 0.24);
-  const para = useReveal(progress, 0.26, 0.38);
-  const ctas = useReveal(progress, 0.4, 0.52);
-  const stats = useReveal(progress, 0.54, 0.7);
+  // Only the EGY-KEN BUILDERS masthead enters on load; the kicker, headline,
+  // copy, CTAs and stats each reveal in their own scroll slot — the same
+  // pacing on every device (mobile just spans a much shorter scrub).
+  const kicker = useReveal(progress, 0.04, 0.13);
+  const line1 = useReveal(progress, 0.11, 0.21);
+  const line2 = useReveal(progress, 0.19, 0.29);
+  const line3 = useReveal(progress, 0.27, 0.37);
+  const para = useReveal(progress, 0.39, 0.51);
+  const ctas = useReveal(progress, 0.51, 0.63);
+  const stats = useReveal(progress, 0.65, 0.81);
 
   const cueOpacity = useTransform(progress, [0, 0.06], [1, 0]);
   // The cue is a real button (it skips the choreography); once it has faded
@@ -64,11 +65,11 @@ function HeroContent({ mobile }: { mobile: boolean }) {
   );
 
   // Count the stats up when they actually reveal on screen (their reveal slot
-  // starts at progress 0.54). Under reduced motion the hero isn't pinned, so
+  // starts at progress 0.65). Under reduced motion the hero isn't pinned, so
   // StatCounter's own in-view detection handles it (statsPlay stays false).
   const [statsOnScreen, setStatsOnScreen] = useState(false);
   useMotionValueEvent(progress, "change", (p) => {
-    if (p >= 0.54) setStatsOnScreen(true);
+    if (p >= 0.65) setStatsOnScreen(true);
   });
   const statsPlay = reduce ? false : statsOnScreen;
 
@@ -98,12 +99,6 @@ function HeroContent({ mobile }: { mobile: boolean }) {
     return { style: r, transition: revealTransition };
   };
 
-  // Fold element: scroll slot on desktop, load entrance on mobile.
-  const foldSlot = (
-    r: { opacity: MotionValue<number>; y: MotionValue<number> },
-    mobileDelay: number,
-  ) => (mobile ? enter(mobileDelay) : slot(r));
-
   const skipIntro = () =>
     window.scrollTo({
       top: scrollHeight,
@@ -122,20 +117,22 @@ function HeroContent({ mobile }: { mobile: boolean }) {
     >
       <Container className="relative z-20 flex min-h-[100svh] flex-col pb-24 pt-24 [text-shadow:0_2px_22px_rgba(2,18,28,0.6)] sm:pb-12 sm:pt-32">
         <div className="flex flex-1 flex-col justify-center">
+          {/* The masthead is the only element visible before scrolling, so it
+              carries the fold at display scale */}
           <motion.div
-            {...enter(0)}
-            className="mb-6 flex items-center justify-center gap-4 sm:mb-8"
+            {...enter(0.1)}
+            className="mb-6 flex items-center justify-center gap-4 sm:mb-8 sm:gap-6"
           >
-            <span className="h-px w-8 bg-bone/25 sm:w-12" aria-hidden />
-            <span className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-bone sm:text-base">
+            <span className="hidden h-px bg-bone/25 sm:block sm:w-20" aria-hidden />
+            <span className="text-center text-[clamp(1.35rem,4.8vw,2.75rem)] font-semibold uppercase leading-tight tracking-[0.18em] text-bone">
               EGY-KEN Builders
             </span>
-            <span className="h-px w-8 bg-bone/25 sm:w-12" aria-hidden />
+            <span className="hidden h-px bg-bone/25 sm:block sm:w-20" aria-hidden />
           </motion.div>
 
           {/* items-start + offset keeps the rule on the first line when the
               kicker wraps on narrow screens */}
-          <motion.div {...enter(0.1)} className="flex items-start gap-3">
+          <motion.div {...slot(kicker)} className="flex items-start gap-3">
             <span className="rule-amber mt-[7px] shrink-0" aria-hidden />
             <span className="text-xs font-semibold uppercase tracking-[0.22em] text-amber">
               Building &amp; Civil Engineering · Nairobi
@@ -143,20 +140,20 @@ function HeroContent({ mobile }: { mobile: boolean }) {
           </motion.div>
 
           <h1 className="mt-4 max-w-3xl font-display text-[clamp(2.1rem,9.5vw,2.6rem)] font-semibold leading-[1.05] tracking-tight text-bone sm:mt-6 sm:text-6xl md:text-[4.25rem]">
-            <motion.span {...enter(0.25)} className="block">
+            <motion.span {...slot(line1)} className="block">
               We Build{" "}
               <span className="font-light italic text-amber">Landmark</span>
             </motion.span>
-            <motion.span {...foldSlot(line2, 0.4)} className="block">
+            <motion.span {...slot(line2)} className="block">
               Structures, Engineered
             </motion.span>
-            <motion.span {...foldSlot(line3, 0.5)} className="block">
+            <motion.span {...slot(line3)} className="block">
               to Last.
             </motion.span>
           </h1>
 
           <motion.p
-            {...foldSlot(para, 0.65)}
+            {...slot(para)}
             className="mt-4 max-w-xl text-sm leading-relaxed text-bone/80 sm:mt-7 sm:text-lg"
           >
             From high-rise residential towers to specialised sports
@@ -166,7 +163,7 @@ function HeroContent({ mobile }: { mobile: boolean }) {
           </motion.p>
 
           <motion.div
-            {...foldSlot(ctas, 0.8)}
+            {...slot(ctas)}
             className="mt-6 flex flex-col gap-3 sm:mt-9 sm:flex-row sm:items-center sm:gap-4"
           >
             <CTA href="/projects" variant="primary">
@@ -199,7 +196,10 @@ function HeroContent({ mobile }: { mobile: boolean }) {
       {!reduce && (
         <motion.div
           style={{ opacity: cueOpacity, pointerEvents: cuePointerEvents }}
-          className="absolute inset-x-0 bottom-7 z-20 flex justify-center"
+          // Anchored to the viewport height, not the container bottom: the
+          // hidden content stack can make the hero taller than one screen,
+          // which would otherwise push the cue below the first fold.
+          className="absolute inset-x-0 top-[calc(100svh-5.5rem)] z-20 flex justify-center"
         >
           <button
             type="button"
