@@ -8,9 +8,9 @@ export const site = {
   // Used for SEO / metadataBase. Replace with the live domain when known.
   url: "https://egyken.co.ke",
   shortIntro:
-    "A premier building, civil engineering and high-end construction firm in Nairobi — delivering complex residential, commercial and specialised sports infrastructure across East Africa.",
+    "A premier building, civil engineering and high-end construction firm in Nairobi, delivering complex residential, commercial and specialised sports infrastructure across East Africa.",
   metaDescription:
-    "EGY-KEN Builders Limited — NCA 1 registered building & civil engineering contractor in Nairobi, Kenya. Premium residential, commercial and sports infrastructure, with materials sourced from Egypt & Turkey.",
+    "EGY-KEN Builders Limited is an NCA 1 registered building & civil engineering contractor in Nairobi, Kenya. Premium residential, commercial and sports infrastructure, with materials sourced from Egypt & Turkey.",
 
   // Credentials / trust signals
   credentials: {

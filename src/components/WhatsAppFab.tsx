@@ -8,7 +8,8 @@ export function WhatsAppFab() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setShow(window.scrollY > 300);
+    // Past the homepage hero's scrub track, so it never sits on the stats card.
+    const onScroll = () => setShow(window.scrollY > 640);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);

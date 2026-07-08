@@ -1,8 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+/* Draft persistence: an interrupted mobile user (app switch, accidental
+   refresh) should never lose a half-written enquiry. */
+const DRAFT_KEY = "egyken-contact-draft";
 
 const projectTypes = [
   "Residential",
@@ -22,7 +26,7 @@ const budgets = [
   "Not sure yet",
 ];
 
-type Errors = Partial<Record<"name" | "email" | "message", string>>;
+type Errors = Partial<Record<"name" | "email" | "phone" | "message", string>>;
 
 const fieldBase =
   "w-full rounded-md border bg-white px-4 py-3 text-sm text-charcoal placeholder:text-concrete-ink transition-colors focus:border-steel focus:outline-none focus:ring-2 focus:ring-steel/25";
@@ -37,9 +41,46 @@ function Label({ htmlFor, children, required }: { htmlFor: string; children: Rea
 }
 
 export function ContactForm() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [serverMsg, setServerMsg] = useState("");
+
+  useEffect(() => {
+    const form = formRef.current;
+    if (!form) return;
+    try {
+      const raw = sessionStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const draft = JSON.parse(raw) as Record<string, string>;
+      for (const [key, value] of Object.entries(draft)) {
+        if (key === "company") continue;
+        const el = form.elements.namedItem(key);
+        if (
+          el instanceof HTMLInputElement ||
+          el instanceof HTMLTextAreaElement ||
+          el instanceof HTMLSelectElement
+        ) {
+          el.value = value;
+        }
+      }
+    } catch {
+      /* private-mode storage restrictions — the form still works */
+    }
+  }, []);
+
+  function saveDraft(form: HTMLFormElement) {
+    try {
+      const data = new FormData(form);
+      data.delete("company");
+      sessionStorage.setItem(
+        DRAFT_KEY,
+        JSON.stringify(Object.fromEntries(data.entries())),
+      );
+    } catch {
+      /* storage unavailable — skip silently */
+    }
+  }
 
   function validate(form: HTMLFormElement): Errors {
     const data = new FormData(form);
@@ -48,6 +89,9 @@ export function ContactForm() {
     const email = String(data.get("email") ?? "").trim();
     if (!email) next.email = "Please enter your email.";
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) next.email = "Please enter a valid email address.";
+    const phone = String(data.get("phone") ?? "").trim();
+    if (phone && !/^\+?[0-9()\-\s]{7,20}$/.test(phone))
+      next.phone = "Please enter a valid phone number, e.g. +254 7xx xxx xxx.";
     const message = String(data.get("message") ?? "").trim();
     if (message.length < 10) next.message = "Please add a few details (at least 10 characters).";
     return next;
@@ -56,7 +100,7 @@ export function ContactForm() {
   function handleBlur(e: React.FocusEvent<HTMLFormElement>) {
     const form = e.currentTarget;
     const name = (e.target as unknown as HTMLInputElement).name;
-    if (name !== "name" && name !== "email" && name !== "message") return;
+    if (name !== "name" && name !== "email" && name !== "phone" && name !== "message") return;
     const next = validate(form);
     setErrors((prev) => ({ ...prev, [name]: next[name as keyof Errors] }));
   }
@@ -66,7 +110,7 @@ export function ContactForm() {
     const form = e.currentTarget;
     const next = validate(form);
     setErrors(next);
-    const firstInvalid = (["name", "email", "message"] as const).find(
+    const firstInvalid = (["name", "email", "phone", "message"] as const).find(
       (k) => next[k],
     );
     if (firstInvalid) {
@@ -87,6 +131,11 @@ export function ContactForm() {
       if (!res.ok) throw new Error(json?.error ?? "Something went wrong.");
       setStatus("success");
       form.reset();
+      try {
+        sessionStorage.removeItem(DRAFT_KEY);
+      } catch {
+        /* storage unavailable — nothing to clear */
+      }
     } catch (err) {
       setStatus("error");
       setServerMsg(err instanceof Error ? err.message : "Something went wrong.");
@@ -101,7 +150,7 @@ export function ContactForm() {
       >
         <CheckCircle2 className="h-12 w-12 text-steel" />
         <h3 className="mt-4 font-display text-2xl font-semibold text-navy-deep">
-          Thank you — message received.
+          Thank you. Message received.
         </h3>
         <p className="mt-2 max-w-sm text-sm text-charcoal/75">
           Our team will get back to you within one business day. For anything
@@ -120,8 +169,10 @@ export function ContactForm() {
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
       onBlur={handleBlur}
+      onInput={(e) => saveDraft(e.currentTarget)}
       noValidate
       className="rounded-xl border border-concrete/50 bg-white p-6 shadow-card sm:p-8"
     >
@@ -186,8 +237,15 @@ export function ContactForm() {
             inputMode="tel"
             autoComplete="tel"
             placeholder="+254 7xx xxx xxx"
-            className={cn(fieldBase, "border-concrete")}
+            aria-invalid={errors.phone ? "true" : undefined}
+            aria-describedby={errors.phone ? "phone-error" : undefined}
+            className={cn(fieldBase, errors.phone ? "border-red-500" : "border-concrete")}
           />
+          {errors.phone && (
+            <p id="phone-error" role="alert" className="mt-1.5 flex items-center gap-1 text-xs text-red-600">
+              <AlertCircle className="h-3.5 w-3.5" /> {errors.phone}
+            </p>
+          )}
         </div>
 
         <div>
@@ -232,7 +290,7 @@ export function ContactForm() {
       <div aria-live="polite" className="min-h-5">
         {status === "error" && (
           <p className="mt-4 flex items-center gap-1.5 text-sm text-red-600">
-            <AlertCircle className="h-4 w-4" /> {serverMsg || "Couldn't send — please try again or contact us directly."}
+            <AlertCircle className="h-4 w-4" /> {serverMsg || "Couldn't send. Please try again or contact us directly."}
           </p>
         )}
       </div>

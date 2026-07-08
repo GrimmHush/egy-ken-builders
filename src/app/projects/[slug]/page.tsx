@@ -23,7 +23,7 @@ export async function generateMetadata({
   if (!p) return { title: "Project not found" };
   return {
     title: p.name,
-    description: `${p.name} — ${p.location}, ${p.city}. ${p.scope}`,
+    description: `${p.name}, ${p.location}, ${p.city}. ${p.scope}`,
   };
 }
 
@@ -64,7 +64,7 @@ export default async function ProjectDetail({
           <Reveal>
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2 text-sm font-medium text-concrete transition-colors hover:text-amber"
+              className="inline-flex items-center gap-2 text-sm font-medium text-bone/75 transition-colors hover:text-amber"
             >
               <ArrowLeft className="h-4 w-4" /> All projects
             </Link>
@@ -74,7 +74,7 @@ export default async function ProjectDetail({
             <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-[1.06] tracking-tight text-bone sm:text-5xl">
               {project.name}
             </h1>
-            <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-concrete">
+            <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-bone/75">
               <span className="flex items-center gap-1.5">
                 <MapPin className="h-4 w-4 text-amber" /> {project.location},{" "}
                 {project.city}
@@ -99,7 +99,7 @@ export default async function ProjectDetail({
                 {project.cover ? (
                   <Image
                     src={project.cover}
-                    alt={project.coverAlt ?? `${project.name} — project photograph`}
+                    alt={project.coverAlt ?? `${project.name} project photograph`}
                     fill
                     priority
                     sizes="(max-width: 1152px) 100vw, 1152px"
@@ -194,7 +194,7 @@ export default async function ProjectDetail({
                       >
                         <Image
                           src={src}
-                          alt={`${project.name} — site photograph ${i + 1} of ${project.photos!.length}`}
+                          alt={`${project.name} site photograph ${i + 1} of ${project.photos!.length}`}
                           fill
                           sizes={
                             i === 0
@@ -225,12 +225,25 @@ export default async function ProjectDetail({
             href={`/projects/${next.slug}`}
             className="group mt-16 flex items-center justify-between gap-6 rounded-xl border border-concrete/50 bg-white p-6 shadow-card transition-[transform,border-color,box-shadow] duration-500 ease-out-expo hover:-translate-y-1 hover:border-amber/50 hover:shadow-lift sm:p-8"
           >
-            <div>
-              <span className="text-xs font-semibold uppercase tracking-[0.16em] text-charcoal/70">
-                Next project
-              </span>
-              <div className="mt-1.5 font-display text-xl font-semibold text-navy-deep sm:text-2xl">
-                {next.name}
+            <div className="flex items-center gap-5">
+              {next.cover && (
+                <span className="relative hidden h-16 w-24 shrink-0 overflow-hidden rounded-lg sm:block">
+                  <Image
+                    src={next.cover}
+                    alt=""
+                    fill
+                    sizes="96px"
+                    className="object-cover transition-transform duration-500 ease-out-expo group-hover:scale-105"
+                  />
+                </span>
+              )}
+              <div>
+                <span className="text-xs font-semibold uppercase tracking-[0.16em] text-charcoal/70">
+                  Next project
+                </span>
+                <div className="mt-1.5 font-display text-xl font-semibold text-navy-deep sm:text-2xl">
+                  {next.name}
+                </div>
               </div>
             </div>
             <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-amber text-navy-deep shadow-sm transition-[transform,box-shadow] duration-500 ease-out-expo group-hover:translate-x-1.5 group-hover:shadow-[0_10px_26px_-12px_rgba(238,156,69,0.8)]">

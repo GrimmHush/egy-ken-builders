@@ -23,7 +23,7 @@ import { cn } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Civil & structural engineering, premium padel courts, architectural facades, waterproof joinery, and steel & tensile structures — delivered end-to-end by EGY-KEN Builders.",
+    "Civil & structural engineering, premium padel courts, architectural facades, waterproof joinery, and steel & tensile structures, delivered end-to-end by EGY-KEN Builders.",
 };
 
 const iconMap: Record<string, LucideIcon> = {
@@ -40,8 +40,8 @@ export default function ServicesPage() {
       <PageHero
         kicker="Services"
         title="Specialised construction, delivered end-to-end."
-        intro="Five capabilities under one accountable team — from deep foundations to the finishing touches that set our work apart."
-        seed={5}
+        intro="Five capabilities under one accountable team, from deep foundations to the finishing touches that set our work apart."
+        image="/services-hero.png"
       />
 
       <section className="bg-bone py-20 sm:py-28">

@@ -18,12 +18,13 @@ export function StatCounter({
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -15% 0px" });
   const reduce = useReducedMotion();
-  const [n, setN] = useState(0);
+  // Server HTML carries the real number; the count-up only replaces it
+  // once the animation actually starts.
+  const [n, setN] = useState(value);
   const active = play || inView;
 
   useEffect(() => {
-    if (!active) return;
-    if (reduce) {
+    if (!active || reduce) {
       setN(value);
       return;
     }
@@ -46,7 +47,7 @@ export function StatCounter({
         <span className="tabular-nums">{n}</span>
         <span className="text-amber">{suffix}</span>
       </div>
-      <div className="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-concrete sm:mt-1.5">
+      <div className="mt-1 text-xs font-medium uppercase tracking-[0.16em] text-bone/70 sm:mt-1.5">
         {label}
       </div>
     </div>

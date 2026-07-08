@@ -76,18 +76,18 @@ export async function POST(request: Request) {
     message.length > 5000
   ) {
     return NextResponse.json(
-      { error: "Your message is too long — please shorten it and try again." },
+      { error: "Your message is too long. Please shorten it and try again." },
       { status: 422 },
     );
   }
 
   const html = `
-    <h2>New enquiry — ${site.name}</h2>
+    <h2>New enquiry for ${site.name}</h2>
     <p><strong>Name:</strong> ${escapeHtml(name)}</p>
     <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-    <p><strong>Phone:</strong> ${escapeHtml(phone) || "—"}</p>
-    <p><strong>Project type:</strong> ${escapeHtml(projectType) || "—"}</p>
-    <p><strong>Budget:</strong> ${escapeHtml(budget) || "—"}</p>
+    <p><strong>Phone:</strong> ${escapeHtml(phone) || "Not provided"}</p>
+    <p><strong>Project type:</strong> ${escapeHtml(projectType) || "Not provided"}</p>
+    <p><strong>Budget:</strong> ${escapeHtml(budget) || "Not provided"}</p>
     <p><strong>Message:</strong></p>
     <p style="white-space:pre-wrap">${escapeHtml(message)}</p>
   `;
@@ -114,7 +114,7 @@ export async function POST(request: Request) {
       from: process.env.RESEND_FROM ?? "EGY-KEN Website <onboarding@resend.dev>",
       to: [process.env.CONTACT_TO ?? site.email],
       replyTo: email,
-      subject: `New enquiry from ${name} — ${projectType || "General"}`,
+      subject: `New enquiry from ${name} (${projectType || "General"})`,
       html,
     });
     if (error) throw new Error(error.message);

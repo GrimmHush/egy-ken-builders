@@ -12,7 +12,7 @@ export default function NotFound() {
         <h1 className="mt-4 font-display text-2xl font-semibold text-bone sm:text-3xl">
           This page couldn&apos;t be found.
         </h1>
-        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-concrete">
+        <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-bone/75">
           The page you&apos;re looking for may have moved. Let&apos;s get you
           back on solid ground.
         </p>

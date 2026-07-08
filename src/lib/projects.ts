@@ -37,7 +37,7 @@ export const projects: Project[] = [
     year: "2025",
     client: "Elite Residential Developer",
     scope:
-      "Full structural execution of three residential towers up to 16 floors — including basements, swimming pool, and the supply and installation of 1,250 premium doors.",
+      "Full structural execution of three residential towers up to 16 floors, including basements, swimming pool, and the supply and installation of 1,250 premium doors.",
     highlights: [
       { label: "Towers", value: "3" },
       { label: "Floors", value: "16" },
@@ -100,7 +100,7 @@ export const projects: Project[] = [
     featured: true,
     cover: "/wilma-cover.png",
     coverAlt:
-      "Wilma Towers at dusk — amber-accented twin high-rise with lit balconies",
+      "Wilma Towers at dusk: amber-accented twin high-rise with lit balconies",
     photos: ["/wilma-01.png", "/wilma-02.png"],
     seed: 3,
     gallery: 5,

@@ -60,7 +60,7 @@ export function ProjectCard({
           className="mt-2.5 block h-px w-12 origin-left scale-x-0 bg-amber/80 transition-transform duration-500 ease-out-expo group-hover:scale-x-100"
           aria-hidden
         />
-        <p className="mt-2.5 flex items-center gap-1.5 text-sm text-concrete">
+        <p className="mt-2.5 flex items-center gap-1.5 text-sm text-bone/75">
           <MapPin className="h-3.5 w-3.5 text-amber" />
           {project.location} · {project.year}
         </p>

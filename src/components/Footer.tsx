@@ -15,13 +15,13 @@ const credentials = [
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="relative bg-navy-deep text-concrete">
+    <footer className="relative bg-navy-deep text-bone/75">
       <div className="blueprint absolute inset-0" aria-hidden />
       <Container className="relative py-16 sm:py-20">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12">
           <div className="md:col-span-4">
             <Logo tone="light" />
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-concrete/90">
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-bone/70">
               {site.shortIntro}
             </p>
           </div>
@@ -85,7 +85,7 @@ export function Footer() {
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-amber" />
                 <a
                   href={mailHref}
-                  className="break-all link-underline transition-colors hover:text-amber"
+                  className="break-words link-underline transition-colors hover:text-amber"
                 >
                   {site.email}
                 </a>
@@ -108,7 +108,7 @@ export function Footer() {
           {credentials.map((c) => (
             <span
               key={c}
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-concrete/90"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-bone/70"
             >
               <ShieldCheck className="h-3.5 w-3.5 text-amber" />
               {c}
@@ -116,7 +116,7 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-8 flex flex-col items-start justify-between gap-2 text-xs text-concrete/80 sm:flex-row sm:items-center">
+        <div className="mt-8 flex flex-col items-start justify-between gap-2 text-xs text-bone/65 sm:flex-row sm:items-center">
           <p>
             © {year} {site.legalName}. All rights reserved.
           </p>

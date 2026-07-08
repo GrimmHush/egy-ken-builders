@@ -131,7 +131,7 @@ export function Navbar() {
             aria-controls="mobile-menu"
             className={cn(
               "relative z-50 -mr-1 inline-flex h-10 w-10 items-center justify-center rounded-md md:hidden",
-              open || !light ? "text-navy" : "text-bone",
+              open ? "text-bone" : !light ? "text-navy" : "text-bone",
             )}
           >
             {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}

@@ -16,11 +16,12 @@ export default function ProjectsPage() {
       <PageHero
         kicker="Portfolio"
         title="Projects that define our standard."
-        intro="From twin high-rise towers in Kilimani to specialised sports infrastructure and large-span medical roofing — a selection of our work across East Africa."
-        seed={7}
+        intro="From twin high-rise towers in Kilimani to specialised sports infrastructure and large-span medical roofing: a selection of our work across East Africa."
+        image="/projects-hero.png"
       />
       <section className="bg-bone py-20 sm:py-28">
         <Container>
+          <h2 className="sr-only">Browse the portfolio</h2>
           <ProjectsExplorer />
         </Container>
       </section>

@@ -22,7 +22,7 @@ const sans = Hanken_Grotesk({
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: `${site.legalName} — ${site.tagline}`,
+    default: `${site.legalName} | ${site.tagline}`,
     template: `%s · ${site.name}`,
   },
   description: site.metaDescription,
@@ -40,13 +40,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_KE",
     siteName: site.name,
-    title: `${site.legalName} — ${site.tagline}`,
+    title: `${site.legalName} | ${site.tagline}`,
     description: site.metaDescription,
     url: site.url,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${site.legalName} — ${site.tagline}`,
+    title: `${site.legalName} | ${site.tagline}`,
     description: site.metaDescription,
   },
   robots: { index: true, follow: true },
@@ -108,7 +108,7 @@ export default function RootLayout({
         </noscript>
         <a
           href="#main"
-          className="fixed left-4 top-4 z-[60] -translate-y-24 rounded-md bg-navy-deep px-4 py-2.5 text-sm font-semibold text-bone shadow-lift transition-transform duration-200 focus-visible:translate-y-0"
+          className="sr-only z-[60] rounded-md bg-navy-deep px-4 py-2.5 text-sm font-semibold text-bone shadow-lift focus-visible:not-sr-only focus-visible:fixed focus-visible:left-4 focus-visible:top-4"
         >
           Skip to content
         </a>

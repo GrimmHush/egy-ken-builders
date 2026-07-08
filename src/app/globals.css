@@ -118,6 +118,14 @@ body {
   animation: scroll-nudge 1.8s var(--ease-soft) infinite;
 }
 
+/* Scroll reveals must never suppress content in paged/static renders */
+@media print {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

@@ -52,7 +52,7 @@ export default function ContactPage() {
         kicker="Contact"
         title="Let's discuss your project."
         intro="Tell us about your build and our team will respond within one business day. For anything urgent, call or message us on WhatsApp."
-        seed={13}
+        image="/contact-hero.png"
       />
 
       <section className="bg-bone py-20 sm:py-28">

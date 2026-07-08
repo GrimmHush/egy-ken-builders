@@ -38,7 +38,7 @@ export function CredentialStrip() {
               <h3 className="mt-4 font-display text-lg font-semibold text-bone">
                 {it.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-concrete">
+              <p className="mt-2 text-sm leading-relaxed text-bone/75">
                 {it.body}
               </p>
             </Reveal>

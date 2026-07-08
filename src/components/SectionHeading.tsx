@@ -17,7 +17,7 @@ export function SectionHeading({
   const centered = align === "center";
   const titleColor = tone === "light-on-dark" ? "text-bone" : "text-navy-deep";
   const introColor =
-    tone === "light-on-dark" ? "text-concrete" : "text-charcoal/75";
+    tone === "light-on-dark" ? "text-bone/75" : "text-charcoal/75";
 
   return (
     <Reveal

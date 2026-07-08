@@ -12,36 +12,36 @@ import { PageHero } from "@/components/PageHero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Reveal } from "@/components/Reveal";
 import { StatCounter } from "@/components/StatCounter";
-import { BrandImage } from "@/components/BrandImage";
+import Image from "next/image";
 import { CTASection } from "@/components/CTASection";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "EGY-KEN Builders Limited — an NCA 1 registered building and civil engineering firm in Nairobi, delivering premium projects across East Africa since 2018.",
+    "EGY-KEN Builders Limited is an NCA 1 registered building and civil engineering firm in Nairobi, delivering premium projects across East Africa since 2018.",
 };
 
 const compliance = [
   {
     Icon: ShieldCheck,
     label: "NCA 1 Registration",
-    value: `Reg. ${site.credentials.nca.number} — top-tier category for Building Works`,
+    value: `Reg. ${site.credentials.nca.number}, the top-tier category for Building Works`,
   },
   {
     Icon: Receipt,
     label: "KRA Tax Compliance",
-    value: `PIN ${site.credentials.kraPin} — active obligations`,
+    value: `PIN ${site.credentials.kraPin} with active obligations`,
   },
   {
     Icon: FileBadge,
     label: "Single Business Permit",
-    value: "Nairobi City County — Contractor Activity Code 825",
+    value: "Nairobi City County, Contractor Activity Code 825",
   },
   {
     Icon: Flame,
     label: "Fire Prevention Clearance",
-    value: "Nairobi City County certified — Plot No. 30/716",
+    value: "Nairobi City County certified, Plot No. 30/716",
   },
   {
     Icon: HardHat,
@@ -62,7 +62,7 @@ export default function AboutPage() {
         kicker="About Us"
         title="Engineering excellence, delivered across East Africa."
         intro={site.shortIntro}
-        seed={11}
+        image="/about-hero.png"
       />
 
       {/* Story */}
@@ -71,8 +71,14 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
             <Reveal className="order-2 lg:order-1">
               <div className="overflow-hidden rounded-2xl shadow-lift">
-                <div className="aspect-[4/3]">
-                  <BrandImage seed={23} kind="card" />
+                <div className="relative aspect-[4/3]">
+                  <Image
+                    src="/about-portrait.png"
+                    alt="Two EGY-KEN engineers reviewing drawings on an upper structural deck, the Nairobi skyline beyond"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
                 </div>
               </div>
             </Reveal>
@@ -91,8 +97,8 @@ export default function AboutPage() {
                 </p>
                 <p>
                   Our competitive edge lies in bridging highly specialised
-                  global procurement networks — specifically importing premium
-                  materials from Egypt and Turkey — with elite local engineering
+                  global procurement networks, importing premium materials
+                  from Egypt and Turkey, with elite local engineering
                   expertise. We specialise in turn-key structural executions,
                   premium interior fit-outs, and professional sports facility
                   developments such as Super Panorama padel courts.
@@ -101,7 +107,7 @@ export default function AboutPage() {
                   Driven by strict compliance with international building
                   regulations and FIDIC contract standards, we work seamlessly
                   with institutional investors, joint-venture partnerships and
-                  private developers — transforming complex architectural
+                  private developers, transforming complex architectural
                   blueprints into iconic, resilient structures, on time and
                   within budget.
                 </p>

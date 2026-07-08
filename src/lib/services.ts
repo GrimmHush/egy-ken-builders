@@ -33,7 +33,7 @@ export const services: Service[] = [
     title: "Premium Padel Court Infrastructure",
     summary:
       "Turnkey importation and installation of Super Panorama padel courts from Egypt & Turkey.",
-    body: "A specialised division delivering professional sports facilities — from laser-guided base construction to the installation of premium Super Panorama padel courts imported from Egypt and Turkey.",
+    body: "A specialised division delivering professional sports facilities, from laser-guided base construction to the installation of premium Super Panorama padel courts imported from Egypt and Turkey.",
     points: [
       "Laser-guided base construction",
       "Super Panorama court systems",
@@ -48,7 +48,7 @@ export const services: Service[] = [
     title: "Advanced Architectural Facades",
     summary:
       "Structural glazing, acoustic curtain walling and high-spec aluminium profiles.",
-    body: "Design, fabrication and installation of architectural facades — structural glazing, acoustic curtain walling and precision aluminium profiles that define a building's character and performance.",
+    body: "Design, fabrication and installation of architectural facades: structural glazing, acoustic curtain walling and precision aluminium profiles that define a building's character and performance.",
     points: [
       "Structural glazing systems",
       "Acoustic curtain walling",
@@ -63,7 +63,7 @@ export const services: Service[] = [
     title: "Waterproof Doors & Joinery",
     summary:
       "High-volume, precision-installed 100% waterproof PVC composite frames & clad doors.",
-    body: "High-volume procurement and precision installation of 100% waterproof PVC composite frames and clad door systems — proven at scale across our flagship residential towers.",
+    body: "High-volume procurement and precision installation of 100% waterproof PVC composite frames and clad door systems, proven at scale across our flagship residential towers.",
     points: [
       "100% waterproof PVC composites",
       "Clad door systems",
@@ -78,7 +78,7 @@ export const services: Service[] = [
     title: "Steel Structures & Tensile Canopies",
     summary:
       "Heavy industrial steel trusses, roofing and translucent waterproof fabric covers.",
-    body: "Engineering and erecting heavy industrial steel — trusses, large-span roofing and translucent waterproof tensile canopies for sports, healthcare and commercial facilities.",
+    body: "Engineering and erecting heavy industrial steel: trusses, large-span roofing and translucent waterproof tensile canopies for sports, healthcare and commercial facilities.",
     points: [
       "Large-span steel trusses",
       "Industrial roofing systems",

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Hero } from "@/components/Hero";
 import { Container } from "@/components/Container";
@@ -9,7 +10,6 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { ProcessSteps } from "@/components/ProcessSteps";
 import { CredentialStrip } from "@/components/CredentialStrip";
 import { CTASection } from "@/components/CTASection";
-import { BrandImage } from "@/components/BrandImage";
 import { services } from "@/lib/services";
 import { featuredProjects } from "@/lib/projects";
 import { site } from "@/lib/site";
@@ -34,7 +34,7 @@ export default function HomePage() {
             <div>
               <SectionHeading
                 title="Bridging global procurement with elite local engineering."
-                intro="Since 2018, EGY-KEN Builders Limited has delivered complex, high-end residential, commercial and specialised sports infrastructure across East Africa — built to international standards and finished to the highest spec."
+                intro="Since 2018, EGY-KEN Builders Limited has delivered complex, high-end residential, commercial and specialised sports infrastructure across East Africa, built to international standards and finished to the highest spec."
               />
               <ul className="mt-8 grid grid-cols-1 gap-x-8 gap-y-5 sm:grid-cols-2">
                 {site.values.map((v, i) => (
@@ -58,8 +58,14 @@ export default function HomePage() {
 
             <Reveal delay={0.1} className="relative">
               <div className="relative overflow-hidden rounded-2xl shadow-lift">
-                <div className="aspect-[4/5]">
-                  <BrandImage seed={17} kind="square" />
+                <div className="relative aspect-[4/5]">
+                  <Image
+                    src="/home-about-teaser.png"
+                    alt="Structural drawings checked against a cast concrete column at golden hour, rebar towers rising behind"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover"
+                  />
                 </div>
               </div>
               <div className="absolute -bottom-6 -left-6 hidden rounded-xl border border-concrete/40 bg-white p-5 shadow-card sm:block">

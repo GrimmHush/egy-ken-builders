@@ -12,7 +12,7 @@ export function Logo({
   return (
     <Link
       href="/"
-      aria-label="EGY-KEN Builders — home"
+      aria-label="EGY-KEN Builders, back to home"
       className={cn(
         "group inline-flex items-center transition-transform duration-300 ease-out-expo hover:-translate-y-0.5",
         className,
